@@ -1,0 +1,21 @@
+1. Ana Sayfa
+2. Ürün Listeleme
+3. Ürün Detay Sayfası
+4. Arama Sonuçları
+5. Sepet
+6. Ödeme / sipariş tamamlama sayfası
+7. Sipariş başarı sayfası
+8. Kayıt Ol / giriş yap / çıkış yap
+9. Kullanıcı profil ve sipariş geçmişi
+10. Yönetim paneli
+
+Ana sayfa
+→ Kategori seçimi
+→ Ürün inceleme
+→ Sepete ekleme
+→ Sepeti düzenleme
+→ Giriş yapma / kayıt olma
+→ Teslimat bilgilerini girme
+→ Sipariş oluşturma
+→ Sipariş onayı
+→ Sipariş geçmişinde görüntüleme

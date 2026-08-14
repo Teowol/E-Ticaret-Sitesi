@@ -1,0 +1,17 @@
+Category
+ └─ name, slug, description, image
+
+Product
+ └─ category, name, slug, description, price, stock, image, is_active, created_at
+
+Cart
+ └─ user veya session_key, created_at
+
+CartItem
+ └─ cart, product, quantity
+
+Order
+ └─ user, full_name, email, phone, address, total_amount, status, created_at
+
+OrderItem
+ └─ order, product, product_name, unit_price, quantity
