@@ -1,5 +1,7 @@
+{% load static %}
+{% load i18n %}
 <!DOCTYPE html>
-<html lang="tr">
+<html lang="{{ LANGUAGE_CODE }}">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -8,14 +10,15 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <!-- Bootstrap Icons -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
 </head>
 <body class="bg-light d-flex flex-column min-vh-100">
 
     <!-- ÜST BİLGİ BARI -->
     <div class="bg-custom-dark text-white py-1 small">
         <div class="container d-flex justify-content-between align-items-center">
-            <span><i class="bi bi-truck text-custom"></i> 500 TL Üzeri Ücretsiz Kargo</span>
-            <span><i class="bi bi-headset text-custom"></i> Canlı Destek & Müşteri Hizmetleri</span>
+            <span><i class="bi bi-truck text-custom"></i> {% trans "500 TL Üzeri Ücretsiz Kargo" %}</span>
+            <span><i class="bi bi-headset text-custom"></i> {% trans "Canlı Destek & Müşteri Hizmetleri" %}</span>
         </div>
     </div>
 
@@ -32,7 +35,7 @@
 
             <div class="collapse navbar-collapse" id="navContent">
                 <form class="d-flex mx-auto my-2 my-lg-0 w-50">
-                    <input class="form-control me-2 rounded-pill" type="search" placeholder="İşlemci, ekran kartı, hazır sistem ara...">
+                    <input class="form-control me-2 rounded-pill" type="search" name="q" placeholder="{% trans 'İşlemci, ekran kartı, hazır sistem ara...' %}">
                     <button class="btn btn-custom rounded-pill px-4" type="submit"><i class="bi bi-search"></i></button>
                 </form>
 
@@ -44,7 +47,7 @@
                             class="btn btn-outline-light rounded-pill"
                             title="Tema değiştir">
                             <i class="bi bi-moon-fill"></i>
-                            <span class="d-none d-lg-inline">Tema</span>
+                            <span class="d-none d-lg-inline">{% trans "Tema" %}</span>
                         </button>
                     </li>
 
@@ -54,7 +57,7 @@
                             data-bs-toggle="dropdown"
                             type="button">
                             <i class="bi bi-translate"></i>
-                            Dil
+                            {% trans "Dil" %}
                         </button>
 
                         <ul class="dropdown-menu dropdown-menu-end">
@@ -64,7 +67,7 @@
                                     <input type="hidden" name="language" value="tr">
                                     <input type="hidden" name="next" value="{{ request.path }}">
                                     <button class="dropdown-item" type="submit">
-                                        🇹🇷 Türkçe
+                                        🇹🇷 {% trans "Türkçe" %}
                                     </button>
                                 </form>
                             </li>
@@ -74,18 +77,18 @@
                                     <input type="hidden" name="language" value="en">
                                     <input type="hidden" name="next" value="{{ request.path }}">
                                     <button class="dropdown-item" type="submit">
-                                        🇬🇧 English
+                                        🇬🇧 {% trans "English" %}
                                     </button>
                                 </form>
                             </li>
                         </ul>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link text-white" href="/admin/"><i class="bi bi-shield-lock"></i> Yönetim</a>
+                        <a class="nav-link text-white" href="/admin/"><i class="bi bi-shield-lock"></i> {% trans "Yönetim" %}</a>
                     </li>
                     <li class="nav-item">
                         <a class="btn btn-outline-light position-relative rounded-pill px-3" href="#">
-                            <i class="bi bi-cart3"></i> Sepet
+                            <i class="bi bi-cart3"></i> {% trans "Sepet" %}
                             <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">0</span>
                         </a>
                     </li>
@@ -99,7 +102,7 @@
         <div class="container">
             <ul class="nav nav-underline overflow-x-auto text-nowrap py-2">
                 <li class="nav-item">
-                    <a class="nav-link text-dark fw-semibold" href="{% url 'home' %}"><i class="bi bi-grid-fill text-custom"></i> Tümü</a>
+                    <a class="nav-link text-dark fw-semibold" href="{% url 'home' %}"><i class="bi bi-grid-fill text-custom"></i> {% trans "Tümü" %}</a>
                 </li>
                 {% for cat in categories %}
                 <li class="nav-item">
@@ -121,19 +124,19 @@
             <div class="row g-4 mb-4">
                 <div class="col-md-4">
                     <h5 class="text-white fw-bold">COMPUTER<span class="text-custom">SENSEI</span></h5>
-                    <p class="small">En yeni donanım bileşenleri, oyuncu ekipmanları ve hazır sistemler en uygun fiyatlarla burada.</p>
+                    <p class="small">{% trans "En yeni donanım bileşenleri, oyuncu ekipmanları ve hazır sistemler en uygun fiyatlarla burada." %}</p>
                 </div>
                 <div class="col-md-4">
-                    <h6 class="text-white">Popüler Kategoriler</h6>
+                    <h6 class="text-white">{% trans "Popüler Kategoriler" %}</h6>
                     <ul class="list-unstyled small">
-                        <li><a href="#" class="text-secondary text-decoration-none">Hazır Gaming Sistemler</a></li>
-                        <li><a href="#" class="text-secondary text-decoration-none">Ekran Kartları (GPU)</a></li>
-                        <li><a href="#" class="text-secondary text-decoration-none">İşlemciler (CPU)</a></li>
+                        <li><a href="#" class="text-secondary text-decoration-none">{% trans "Hazır Gaming Sistemler" %}</a></li>
+                        <li><a href="#" class="text-secondary text-decoration-none">{% trans "Ekran Kartları (GPU)" %}</a></li>
+                        <li><a href="#" class="text-secondary text-decoration-none">{% trans "İşlemciler (CPU)" %}</a></li>
                     </ul>
                 </div>
                 <div class="col-md-4">
-                    <h6 class="text-white">Güvenli Alışveriş</h6>
-                    <p class="small">256-bit SSL Güvenliği ile tüm ödemeleriniz koruma altındadır.</p>
+                    <h6 class="text-white">{% trans "Güvenli Alışveriş" %}</h6>
+                    <p class="small">{% trans "256-bit SSL Güvenliği ile tüm ödemeleriniz koruma altındadır." %}</p>
                 </div>
             </div>
             <hr class="border-secondary">
@@ -143,8 +146,6 @@
 
     <!-- Bootstrap JS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-    <script>
-        
-    </script>
+    <script src="{% static 'js/theme.js' %}"></script>
 </body>
 </html>

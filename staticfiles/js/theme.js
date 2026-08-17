@@ -11,7 +11,7 @@ document.addEventListener("DOMContentLoaded", function () {
         const icon = themeButton.querySelector("i");
         const text = themeButton.querySelector("span");
 
-        if (theme === "koyu") {
+        if (theme === "dark") {
             icon.className = "bi bi-sun-fill";
             text.textContent = " Açık";
         } else {
