@@ -1,0 +1,55 @@
+{% extends 'base.html' %}
+{% block title %}Sepetim | TeknoMarket{% endblock %}
+
+{% block content %}
+<div class="container my-5">
+    <h3 class="fw-bold mb-4">Sepetim</h3>
+
+    {% if cart|length > 0 %}
+    <table class="table align-middle">
+        <thead>
+            <tr>
+                <th>Ürün</th>
+                <th>Fiyat</th>
+                <th>Adet</th>
+                <th>Toplam</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for item in cart %}
+            <tr>
+                <td>
+                    <div class="d-flex align-items-center gap-3">
+                        {% if item.product.image %}
+                            <img src="{{ item.product.image.url }}" width="60">
+                        {% endif %}
+                        <span>{{ item.product.name }}</span>
+                    </div>
+                </td>
+                <td>{{ item.price }} TL</td>
+                <td>{{ item.quantity }}</td>
+                <td>{{ item.total_price }} TL</td>
+                <td>
+                    <a href="{% url 'cart_remove' item.product.id %}" class="btn btn-sm btn-outline-danger">
+                        <i class="bi bi-trash"></i>
+                    </a>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    <div class="d-flex justify-content-end">
+        <div class="text-end">
+            <h5>Genel Toplam: <span class="text-primary">{{ cart.get_total_price }} TL</span></h5>
+            <a href="#" class="btn btn-primary btn-lg mt-2">Siparişi Tamamla</a>
+        </div>
+    </div>
+
+    {% else %}
+        <p class="text-secondary">Sepetiniz boş.</p>
+        <a href="{% url 'home' %}" class="btn btn-outline-primary">Alışverişe Devam Et</a>
+    {% endif %}
+</div>
+{% endblock %}

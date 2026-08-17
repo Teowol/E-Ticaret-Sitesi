@@ -1,0 +1,64 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}{{ product.name }} | ComputerSensei{% endblock %}
+
+{% block content %}
+<div class="container my-5">
+    <div class="row g-5">
+
+        <!-- ÜRÜN GÖRSELİ -->
+        <div class="col-md-5">
+            <div class="border rounded-3 p-4 text-center">
+                {% if product.image %}
+                    <img src="{{ product.image.url }}" class="img-fluid" alt="{{ product.name }}">
+                {% else %}
+                    <img src="https://via.placeholder.com/400" class="img-fluid" alt="{{ product.name }}">
+                {% endif %}
+            </div>
+        </div>
+
+        <!-- ÜRÜN BİLGİLERİ -->
+        <div class="col-md-7">
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb small">
+                    <li class="breadcrumb-item"><a href="{% url 'home' %}">Ana Sayfa</a></li>
+                    <li class="breadcrumb-item"><a href="#">{{ product.category.name }}</a></li>
+                    <li class="breadcrumb-item active">{{ product.name }}</li>
+                </ol>
+            </nav>
+
+            <h2 class="fw-bold">{{ product.name }}</h2>
+            <p class="text-secondary">Marka: <strong>{{ product.brand.name|default:"Belirtilmemiş" }}</strong></p>
+
+            <div class="my-3">
+                {% if product.discount_price %}
+                    <span class="text-decoration-line-through text-secondary fs-5">{{ product.price }} TL</span>
+                    <h3 class="text-primary fw-bold d-inline ms-2">{{ product.discount_price }} TL</h3>
+                    <span class="badge bg-danger ms-2">%{{ product.discount_percent }} indirim</span>
+                {% else %}
+                    <h3 class="text-primary fw-bold">{{ product.price }} TL</h3>
+                {% endif %}
+            </div>
+
+            {% if product.stock > 0 %}
+                <p class="text-success"><i class="bi bi-check-circle"></i> Stokta var ({{ product.stock }} adet)</p>
+            {% else %}
+                <p class="text-danger"><i class="bi bi-x-circle"></i> Stokta yok</p>
+            {% endif %}
+
+            <!-- SEPETE EKLE FORMU -->
+            <form action="{% url 'cart_add' product.id %}" method="post" class="d-flex align-items-center gap-3 my-4">
+                {% csrf_token %}
+                <input type="number" name="quantity" value="1" min="1" max="{{ product.stock }}" class="form-control" style="width: 90px;">
+                <button type="submit" class="btn btn-primary btn-lg px-4" {% if product.stock == 0 %}disabled{% endif %}>
+                    <i class="bi bi-cart-plus"></i> Sepete Ekle
+                </button>
+            </form>
+
+            <hr>
+            <h5>Ürün Açıklaması</h5>
+            <p>{{ product.description|linebreaks|default:"Bu ürün için açıklama girilmemiş." }}</p>
+        </div>
+    </div>
+</div>
+{% endblock %}
