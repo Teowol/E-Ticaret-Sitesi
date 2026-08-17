@@ -1,50 +1,172 @@
-<!DOCTYPE html>
+,<!DOCTYPE html>
 <html lang="tr">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{% block title %}ComputerSensei{% endblock %}</title>
-
-    <!-- Bootstrap CSS -->
+    <title>{% block title %}ComputerSensei | LAPTOPLAR VE SİSTEM TOPLAMA{% endblock %}</title>
+    <!-- Bootstrap 5 CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <!-- Bootstrap Icons -->
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
-    <!-- Kendi CSS'in -->
-    <link rel="stylesheet" href="{% static 'css/style.css' %}">
-    {% load static %}
-</head>
-<body>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <style>
+    	:root {
+        	--primary-color: #ff6000;
+        	--dark-color: #171717;
+        	--body-bg: #f5f6f8;
+        	--card-bg: #ffffff;
+        	--text-color: #212529;
+        	--muted-color: #6c757d;
+        	--border-color: #dee2e6;
+    	}
 
-    <!-- ÜST BİLGİ ÇUBUĞU -->
-    <div class="bg-dark text-white py-1 small">
-        <div class="container d-flex justify-content-between">
-            <span><i class="bi bi-truck"></i> 150 TL üzeri ücretsiz kargo</span>
-            <span><i class="bi bi-telephone"></i> 0850 000 00 00</span>
+    	[data-theme="dark"] {
+        	--body-bg: #121212;
+        	--card-bg: #1e1e1e;
+        	--text-color: #f1f1f1;
+        	--muted-color: #b5b5b5;
+        	--border-color: #3a3a3a;
+    	}
+
+    	body {
+        	background-color: var(--body-bg) !important;
+        	color: var(--text-color);
+        	transition: background-color 0.25s ease, color 0.25s ease;
+    	}
+
+    	.bg-light {
+        	background-color: var(--body-bg) !important;
+    	}
+
+    	.card,
+    	.modal-content,
+    	.dropdown-menu {
+        	background-color: var(--card-bg);
+        	color: var(--text-color);
+    	}
+
+    	.text-dark {
+        	color: var(--text-color) !important;
+    	}
+
+    	.text-muted,
+    	.text-secondary {
+        	color: var(--muted-color) !important;
+    	}
+
+    	.border,
+    	.border-bottom,
+    	.border-top {
+        	border-color: var(--border-color) !important;
+    	}
+
+    	.product-card {
+        	transition: transform 0.2s, box-shadow 0.2s;
+        	border-radius: 12px;
+    	}
+
+    	.product-card:hover {
+        	transform: translateY(-5px);
+        	box-shadow: 0 10px 20px rgba(0, 0, 0, 0.18) !important;
+    	}
+
+    	.product-img {
+        	height: 200px;
+        	object-fit: contain;
+    	}
+
+    	.btn-custom {
+        	background-color: var(--primary-color);
+        	color: white;
+    	}
+
+    	.btn-custom:hover {
+        	background-color: #e05500;
+        	color: white;
+    	}
+
+    	.text-custom {
+        	color: var(--primary-color);
+    	}
+    </style>
+</head>
+<body class="bg-light d-flex flex-column min-vh-100">
+
+    <!-- ÜST BİLGİ BARI -->
+    <div class="bg-custom-dark text-white py-1 small">
+        <div class="container d-flex justify-content-between align-items-center">
+            <span><i class="bi bi-truck text-custom"></i> 500 TL Üzeri Ücretsiz Kargo</span>
+            <span><i class="bi bi-headset text-custom"></i> Canlı Destek & Müşteri Hizmetleri</span>
         </div>
     </div>
 
-    <!-- NAVBAR -->
-    <nav class="navbar navbar-expand-lg navbar-light bg-white shadow-sm py-3">
+    <!-- ANA NAVBAR -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark sticky-top border-bottom border-secondary">
         <div class="container">
-            <a class="navbar-brand fw-bold fs-3 text-primary" href="/">Computer<span class="text-dark">Sensei</span></a>
-
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navMenu">
+            <a class="navbar-brand fw-bold fs-3" href="{% url 'home' %}">
+                COMPUTER<span class="text-custom">SENSEI</span>
+            </a>
+            
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navContent">
                 <span class="navbar-toggler-icon"></span>
             </button>
 
-            <div class="collapse navbar-collapse" id="navMenu">
-                <form class="d-flex mx-auto w-50">
-                    <input class="form-control" type="search" placeholder="Ürün, kategori veya marka ara...">
-                    <button class="btn btn-primary ms-2" type="submit"><i class="bi bi-search"></i></button>
+            <div class="collapse navbar-collapse" id="navContent">
+                <form class="d-flex mx-auto my-2 my-lg-0 w-50">
+                    <input class="form-control me-2 rounded-pill" type="search" placeholder="İşlemci, ekran kartı, hazır sistem ara...">
+                    <button class="btn btn-custom rounded-pill px-4" type="submit"><i class="bi bi-search"></i></button>
                 </form>
 
-                <ul class="navbar-nav ms-auto align-items-center gap-3">
-                    <li class="nav-item"><a class="nav-link" href="#"><i class="bi bi-person"></i> Hesabım</a></li>
-                    <li class="nav-item"><a class="nav-link" href="#"><i class="bi bi-heart"></i> Favoriler</a></li>
+                <ul class="navbar-nav ms-auto align-items-center gap-2">
                     <li class="nav-item">
-                        <a class="nav-link position-relative" href="#">
-                            <i class="bi bi-cart3 fs-5"></i> Sepetim
-                            <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">3</span>
+                        <button
+                            type="button"
+                            id="themeToggle"
+                            class="btn btn-outline-light rounded-pill"
+                            title="Tema değiştir">
+                            <i class="bi bi-moon-fill"></i>
+                            <span class="d-none d-lg-inline">Tema</span>
+                        </button>
+                    </li>
+
+                    <li class="nav-item dropdown">
+                        <button
+                            class="btn btn-outline-light dropdown-toggle rounded-pill"
+                            data-bs-toggle="dropdown"
+                            type="button">
+                            <i class="bi bi-translate"></i>
+                            Dil
+                        </button>
+
+                        <ul class="dropdown-menu dropdown-menu-end">
+                            <li>
+                                <form action="{% url 'set_language' %}" method="post">
+                                    {% csrf_token %}
+                                    <input type="hidden" name="language" value="tr">
+                                    <input type="hidden" name="next" value="{{ request.path }}">
+                                    <button class="dropdown-item" type="submit">
+                                        🇹🇷 Türkçe
+                                    </button>
+                                </form>
+                            </li>
+                            <li>
+                                <form action="{% url 'set_language' %}" method="post">
+                                    {% csrf_token %}
+                                    <input type="hidden" name="language" value="en">
+                                    <input type="hidden" name="next" value="{{ request.path }}">
+                                    <button class="dropdown-item" type="submit">
+                                        🇬🇧 English
+                                    </button>
+                                </form>
+                            </li>
+                        </ul>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link text-white" href="/admin/"><i class="bi bi-shield-lock"></i> Yönetim</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="btn btn-outline-light position-relative rounded-pill px-3" href="#">
+                            <i class="bi bi-cart3"></i> Sepet
+                            <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">0</span>
                         </a>
                     </li>
                 </ul>
@@ -53,60 +175,53 @@
     </nav>
 
     <!-- KATEGORİ MENÜSÜ -->
-    <div class="bg-primary">
+    <nav class="bg-white shadow-sm border-bottom">
         <div class="container">
-            <ul class="nav">
-                <li class="nav-item"><a class="nav-link text-white" href="#">Bilgisayarlar</a></li>
-                <li class="nav-item"><a class="nav-link text-white" href="#">Telefonlar</a></li>
-                <li class="nav-item"><a class="nav-link text-white" href="#">Bileşenler</a></li>
-                <li class="nav-item"><a class="nav-link text-white" href="#">Çevre Birimleri</a></li>
-                <li class="nav-item"><a class="nav-link text-white" href="#">Oyun & Konsol</a></li>
-                <li class="nav-item"><a class="nav-link text-white" href="#">Kampanyalar</a></li>
+            <ul class="nav nav-underline overflow-x-auto text-nowrap py-2">
+                <li class="nav-item">
+                    <a class="nav-link text-dark fw-semibold" href="{% url 'home' %}"><i class="bi bi-grid-fill text-custom"></i> Tümü</a>
+                </li>
+                {% for cat in categories %}
+                <li class="nav-item">
+                    <a class="nav-link text-dark" href="{% url 'category_detail' cat.slug %}">{{ cat.name }}</a>
+                </li>
+                {% endfor %}
             </ul>
         </div>
-    </div>
+    </nav>
 
-    <!-- SAYFA İÇERİĞİ -->
-    <main>
+    <!-- ANA İÇERİK -->
+    <main class="flex-grow-1">
         {% block content %}{% endblock %}
     </main>
 
     <!-- FOOTER -->
-    <footer class="bg-dark text-light pt-5 pb-3 mt-5">
+    <footer class="bg-custom-dark text-secondary pt-5 pb-3 mt-5">
         <div class="container">
-            <div class="row">
-                <div class="col-md-3 mb-4">
-                    <h5>ComputerSensei</h5>
-                    <p class="small text-secondary">En uygun fiyatlarla teknoloji ürünleri kapınızda.</p>
+            <div class="row g-4 mb-4">
+                <div class="col-md-4">
+                    <h5 class="text-white fw-bold">TEKNO<span class="text-custom">MARKET</span></h5>
+                    <p class="small">En yeni donanım bileşenleri, oyuncu ekipmanları ve hazır sistemler en uygun fiyatlarla burada.</p>
                 </div>
-                <div class="col-md-3 mb-4">
-                    <h6>Kurumsal</h6>
+                <div class="col-md-4">
+                    <h6 class="text-white">Popüler Kategoriler</h6>
                     <ul class="list-unstyled small">
-                        <li><a href="#" class="text-secondary text-decoration-none">Hakkımızda</a></li>
-                        <li><a href="#" class="text-secondary text-decoration-none">İletişim</a></li>
+                        <li><a href="#" class="text-secondary text-decoration-none">Hazır Gaming Sistemler</a></li>
+                        <li><a href="#" class="text-secondary text-decoration-none">Ekran Kartları (GPU)</a></li>
+                        <li><a href="#" class="text-secondary text-decoration-none">İşlemciler (CPU)</a></li>
                     </ul>
                 </div>
-                <div class="col-md-3 mb-4">
-                    <h6>Müşteri Hizmetleri</h6>
-                    <ul class="list-unstyled small">
-                        <li><a href="#" class="text-secondary text-decoration-none">Kargo Takibi</a></li>
-                        <li><a href="#" class="text-secondary text-decoration-none">İade & Değişim</a></li>
-                    </ul>
-                </div>
-                <div class="col-md-3 mb-4">
-                    <h6>Bizi Takip Edin</h6>
-                    <div class="d-flex gap-3 fs-5">
-                        <a href="#" class="text-light"><i class="bi bi-instagram"></i></a>
-                        <a href="#" class="text-light"><i class="bi bi-twitter"></i></a>
-                        <a href="#" class="text-light"><i class="bi bi-facebook"></i></a>
-                    </div>
+                <div class="col-md-4">
+                    <h6 class="text-white">Güvenli Alışveriş</h6>
+                    <p class="small">256-bit SSL Güvenliği ile tüm ödemeleriniz koruma altındadır.</p>
                 </div>
             </div>
-            <hr class="text-secondary">
-            <p class="text-center small text-secondary mb-0">© 2026 TeknoMarket. Tüm hakları saklıdır.</p>
+            <hr class="border-secondary">
+            <p class="text-center small mb-0">© 2026 ComputerSensei A.Ş. Tüm hakları saklıdır.</p>
         </div>
     </footer>
 
+    <!-- Bootstrap JS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
