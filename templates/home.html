@@ -1,0 +1,43 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}Ana Sayfa | TeknoMarket{% endblock %}
+
+{% block content %}
+
+<div class="container my-5">
+    <h3 class="mb-4 fw-bold">Çok Satan Ürünler</h3>
+    <div class="row g-4">
+        {% for product in featured_products %}
+        <div class="col-6 col-md-3">
+            <div class="card h-100 shadow-sm border-0 product-card">
+                {% if product.discount_percent %}
+                    <span class="badge bg-danger position-absolute m-2">%{{ product.discount_percent }}</span>
+                {% endif %}
+                {% if product.image %}
+                    <img src="{{ product.image.url }}" class="card-img-top p-3" alt="{{ product.name }}">
+                {% else %}
+                    <img src="https://via.placeholder.com/300x220" class="card-img-top p-3" alt="{{ product.name }}">
+                {% endif %}
+                <div class="card-body d-flex flex-column">
+                    <h6 class="card-title">{{ product.name }}</h6>
+                    <div class="mt-auto">
+                        {% if product.discount_price %}
+                            <span class="text-decoration-line-through text-secondary small">{{ product.price }} TL</span>
+                            <h5 class="text-primary fw-bold">{{ product.discount_price }} TL</h5>
+                        {% else %}
+                            <h5 class="text-primary fw-bold">{{ product.price }} TL</h5>
+                        {% endif %}
+                        <a href="{{ product.get_absolute_url }}" class="btn btn-outline-primary w-100">
+                            <i class="bi bi-cart-plus"></i> İncele
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% empty %}
+            <p class="text-secondary">Henüz ürün eklenmedi.</p>
+        {% endfor %}
+    </div>
+</div>
+
+{% endblock %}
