@@ -1,58 +1,53 @@
 :root {
     --primary-color: #ff6000;
-    --primary-hover: #df5100;
+    --dark-color: #171717;
     --body-bg: #f5f6f8;
-    --surface-bg: #ffffff;
-    --navbar-bg: #171717;
+    --card-bg: #ffffff;
+    --navbar-bg: #1a1a1a;
+    --header-bg: #ffffff;
     --text-color: #212529;
     --muted-color: #6c757d;
     --border-color: #dee2e6;
     --input-bg: #ffffff;
-    --shadow-color: rgba(15, 23, 42, 0.10);
+    --btn-outline-color: #212529;
+    --shadow-color: rgba(0, 0, 0, 0.08);
+    --table-color: #212529;
 }
 
 [data-theme="dark"] {
-    --body-bg: #111827;
-    --surface-bg: #1f2937;
-    --navbar-bg: #0b0f19;
-    --text-color: #f3f4f6;
-    --muted-color: #aeb7c5;
-    --border-color: #374151;
-    --input-bg: #273449;
-    --shadow-color: rgba(0, 0, 0, 0.35);
-}
-
-* {
-    transition: background-color 0.2s ease, color 0.2s ease, border-color 0.2s ease;
+    --body-bg: #121212;
+    --card-bg: #1e1e1e;
+    --navbar-bg: #151515;
+    --header-bg: #1a1a1a;
+    --text-color: #f1f1f1;
+    --muted-color: #a0a0a0;
+    --border-color: #333333;
+    --input-bg: #282828;
+    --btn-outline-color: #f1f1f1;
+    --shadow-color: rgba(0, 0, 0, 0.5);
+    --table-color: #f1f1f1;
 }
 
 body {
-    background-color: var(--body-bg);
-    color: var(--text-color);
+    background-color: var(--body-bg) !important;
+    color: var(--text-color) !important;
 }
 
+/* Üst Bar ve Navbar */
 .bg-custom-dark,
-.navbar.bg-dark,
-footer.bg-custom-dark {
+.navbar.bg-dark {
     background-color: var(--navbar-bg) !important;
 }
 
-.search-form {
-    width: min(100%, 520px);
-}
-
-.category-nav,
-.offcanvas,
-.card,
-.dropdown-menu,
-.modal-content {
-    background-color: var(--surface-bg) !important;
-    color: var(--text-color);
+/* Kategori Navigasyonu */
+.category-nav {
+    background-color: var(--header-bg) !important;
     border-color: var(--border-color) !important;
 }
 
 .category-nav .nav-link {
     color: var(--text-color) !important;
+    font-weight: 500;
 }
 
 .category-nav .nav-link:hover,
@@ -60,130 +55,242 @@ footer.bg-custom-dark {
     color: var(--primary-color) !important;
 }
 
-.form-control {
-    background-color: var(--input-bg);
-    color: var(--text-color);
-    border-color: var(--border-color);
+/* Kartlar, Modallar, Yan Menü (Offcanvas) ve Dropdown'lar */
+.card,
+.modal-content,
+.offcanvas,
+.dropdown-menu {
+    background-color: var(--card-bg) !important;
+    color: var(--text-color) !important;
+    border-color: var(--border-color) !important;
 }
 
-.form-control::placeholder {
-    color: var(--muted-color);
+.card,
+.shadow-sm {
+    box-shadow: 0 4px 14px var(--shadow-color) !important;
 }
 
-.form-control:focus {
-    background-color: var(--input-bg);
-    color: var(--text-color);
-    border-color: var(--primary-color);
-    box-shadow: 0 0 0 0.2rem rgba(255, 96, 0, 0.22);
-}
-
-.btn-custom {
-    background-color: var(--primary-color);
-    border-color: var(--primary-color);
-    color: #ffffff;
-}
-
-.btn-custom:hover,
-.btn-custom:focus {
-    background-color: var(--primary-hover);
-    border-color: var(--primary-hover);
-    color: #ffffff;
-}
-
-.text-custom {
-    color: var(--primary-color) !important;
-}
-
-.btn-outline-dark {
-    color: var(--text-color);
-    border-color: var(--border-color);
-}
-
-.btn-outline-dark:hover,
-.btn-outline-dark.active {
-    color: #ffffff;
-    background-color: var(--primary-color);
-    border-color: var(--primary-color);
-}
-
-.settings-choice {
-    min-height: 52px;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    text-align: left;
-}
-
-.product-card {
-    background-color: var(--surface-bg) !important;
-    border: 1px solid var(--border-color) !important;
-    border-radius: 16px;
-    overflow: hidden;
-    transition: transform 0.25s ease, box-shadow 0.25s ease, border-color 0.25s ease;
-}
-
-.product-card:hover {
-    transform: translateY(-6px);
-    border-color: var(--primary-color) !important;
-    box-shadow: 0 14px 30px var(--shadow-color) !important;
-}
-
-.product-image-wrapper {
-    height: 210px;
-    padding: 18px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    background-color: var(--surface-bg);
-}
-
-.product-img {
-    width: 100%;
-    height: 175px;
-    object-fit: contain;
-}
-
-.product-brand,
-.old-price,
-.text-muted,
-.text-secondary {
-    color: var(--muted-color) !important;
-}
-
-.product-name,
-.products-heading {
+.dropdown-item {
     color: var(--text-color) !important;
 }
 
-.current-price {
+.dropdown-item:hover {
+    background-color: var(--body-bg) !important;
     color: var(--primary-color) !important;
-    font-size: 1.25rem;
-    font-weight: 800;
 }
 
-.hero-banner {
-    min-height: 270px;
-    padding: 3rem 1.5rem;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    text-align: center;
-    background: linear-gradient(135deg, #111827 0%, #293548 100%);
-    color: #ffffff;
+/* Metinler ve Başlıklar */
+h1, h2, h3, h4, h5, h6,
+.text-dark,
+.card-title,
+.products-heading,
+.product-name {
+    color: var(--text-color) !important;
 }
 
-.hero-banner h1,
-.hero-banner p {
+.text-muted,
+.text-secondary,
+.product-brand,
+.old-price {
+    color: var(--muted-color) !important;
+}
+
+/* Tablolar (Sepet, Satıcı Paneli vs.) */
+.table {
+    color: var(--table-color) !important;
+    border-color: var(--border-color) !important;
+}
+
+.table > :not(caption) > * > * {
+    background-color: transparent !important;
+    color: var(--table-color) !important;
+    border-bottom-color: var(--border-color) !important;
+}
+
+/* Form Elemanları ve Inputlar */
+.form-control,
+.form-select {
+    background-color: var(--input-bg) !important;
+    color: var(--text-color) !important;
+    border-color: var(--border-color) !important;
+}
+
+.form-control::placeholder {
+    color: var(--muted-color) !important;
+}
+
+.form-control:focus,
+.form-select:focus {
+    background-color: var(--input-bg) !important;
+    color: var(--text-color) !important;
+    border-color: var(--primary-color) !important;
+    box-shadow: 0 0 0 0.25rem rgba(255, 96, 0, 0.25) !important;
+}
+
+.form-label,
+label {
+    color: var(--text-color) !important;
+}
+
+/* Kenarlıklar */
+.border,
+.border-bottom,
+.border-top,
+.border-end,
+.border-start {
+    border-color: var(--border-color) !important;
+}
+
+/* Butonlar */
+.btn-outline-dark {
+    color: var(--btn-outline-color) !important;
+    border-color: var(--btn-outline-color) !important;
+}
+
+.btn-outline-dark:hover {
+    background-color: var(--primary-color) !important;
+    border-color: var(--primary-color) !important;
     color: #ffffff !important;
 }
 
-.hero-banner p {
-    opacity: 0.82;
+.btn-custom {
+    background-color: var(--primary-color) !important;
+    color: #ffffff !important;
+    border: none !important;
 }
 
-@media (max-width: 991.98px) {
-    .search-form {
-        width: 100%;
-    }
+.btn-custom:hover {
+    background-color: #e05500 !important;
+    color: #ffffff !important;
+}
+
+.btn-outline-custom {
+    color: var(--primary-color) !important;
+    border: 1px solid var(--primary-color) !important;
+    background: transparent !important;
+}
+
+.btn-outline-custom:hover {
+    background-color: var(--primary-color) !important;
+    color: #ffffff !important;
+}
+
+.text-custom,
+.current-price {
+    color: var(--primary-color) !important;
+}
+
+/* Hero Banner */
+.hero-banner {
+    background: linear-gradient(135deg, #111111 0%, #252525 100%) !important;
+    color: #ffffff !important;
+    min-height: 250px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+}
+
+.hero-banner h1,
+.hero-banner p,
+.hero-banner .lead {
+    color: #ffffff !important;
+}
+
+/* Ürün Kartı */
+.product-card {
+    background-color: var(--card-bg) !important;
+    border: 1px solid var(--border-color) !important;
+    border-radius: 16px;
+}
+
+.product-card:hover {
+    transform: translateY(-5px);
+    border-color: var(--primary-color) !important;
+    box-shadow: 0 10px 24px var(--shadow-color) !important;
+}
+
+.product-card .product-image-wrapper {
+    height: 190px;
+    padding: 15px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: var(--card-bg) !important;
+}
+
+.product-card .product-img {
+    max-width: 100%;
+    max-height: 160px;
+    object-fit: contain;
+}
+
+/* Footer */
+footer.bg-custom-dark {
+    background-color: var(--navbar-bg) !important;
+}
+
+/* Form input yazı renkleri (kayıt/giriş formları) */
+input,
+textarea,
+select,
+.form-control,
+.form-select {
+    color: #212529 !important;
+    background-color: #ffffff !important;
+    opacity: 1 !important;
+}
+
+[data-theme="dark"] input,
+[data-theme="dark"] textarea,
+[data-theme="dark"] select,
+[data-theme="dark"] .form-control,
+[data-theme="dark"] .form-select {
+    color: #212529 !important;
+    background-color: #ffffff !important;
+}
+
+/* Django'nun otomatik oluşturduğu yardım metinleri (şifre kuralları vb.) */
+.form-text,
+.helptext,
+ul.helptext li,
+.errorlist,
+small.form-text {
+    color: var(--muted-color) !important;
+    opacity: 1 !important;
+}
+
+[data-theme="dark"] .form-text,
+[data-theme="dark"] .helptext,
+[data-theme="dark"] ul.helptext li {
+    color: #cfcfcf !important;
+}
+
+/* Form label'ları (Username, Email address, Password vb.) */
+form label,
+.form-label {
+    color: var(--text-color) !important;
+    opacity: 1 !important;
+}
+
+/* Offcanvas (Görünüm ve Dil Ayarları) paneli */
+.offcanvas,
+.offcanvas-header,
+.offcanvas-body {
+    background-color: var(--card-bg) !important;
+    color: var(--text-color) !important;
+}
+
+.offcanvas-title {
+    color: var(--text-color) !important;
+}
+
+form small,
+form ul,
+form ul li,
+form p,
+form span:not(.input-group-text) {
+    color: var(--text-color) !important;
+    opacity: 1 !important;
 }

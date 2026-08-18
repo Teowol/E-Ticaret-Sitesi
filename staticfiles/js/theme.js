@@ -1,47 +1,43 @@
-// Sayfa yüklenmeden önce tema ayarını uygula (ekran yanıp sönmesini engeller)
 (function () {
-    const savedTheme = localStorage.getItem("theme") || "light";
+    const savedTheme = localStorage.getItem("computersensei-theme") || "light";
     document.documentElement.setAttribute("data-theme", savedTheme);
 })();
 
 document.addEventListener("DOMContentLoaded", function () {
-    const lightBtn = document.getElementById("themeLightBtn");
-    const darkBtn = document.getElementById("themeDarkBtn");
-    const checkLight = document.querySelector(".theme-check-light");
-    const checkDark = document.querySelector(".theme-check-dark");
+    const lightButton = document.getElementById("themeLightBtn");
+    const darkButton = document.getElementById("themeDarkBtn");
+    const lightCheck = document.querySelector(".theme-check-light");
+    const darkCheck = document.querySelector(".theme-check-dark");
 
-    function updateThemeUI() {
-        const currentTheme = document.documentElement.getAttribute("data-theme") || "light";
+    function updateThemeButtons() {
+        const currentTheme = document.documentElement.getAttribute("data-theme");
+
         if (currentTheme === "dark") {
-            if (checkDark) checkDark.classList.remove("d-none");
-            if (checkLight) checkLight.classList.add("d-none");
-            if (darkBtn) darkBtn.classList.add("active");
-            if (lightBtn) lightBtn.classList.remove("active");
+            lightButton?.classList.remove("active");
+            darkButton?.classList.add("active");
+            lightCheck?.classList.add("d-none");
+            darkCheck?.classList.remove("d-none");
         } else {
-            if (checkLight) checkLight.classList.remove("d-none");
-            if (checkDark) checkDark.classList.add("d-none");
-            if (lightBtn) lightBtn.classList.add("active");
-            if (darkBtn) darkBtn.classList.remove("active");
+            lightButton?.classList.add("active");
+            darkButton?.classList.remove("active");
+            lightCheck?.classList.remove("d-none");
+            darkCheck?.classList.add("d-none");
         }
     }
 
     function setTheme(theme) {
         document.documentElement.setAttribute("data-theme", theme);
-        localStorage.setItem("theme", theme);
-        updateThemeUI();
+        localStorage.setItem("computersensei-theme", theme);
+        updateThemeButtons();
     }
 
-    if (lightBtn) {
-        lightBtn.addEventListener("click", function () {
-            setTheme("light");
-        });
-    }
+    lightButton?.addEventListener("click", function () {
+        setTheme("light");
+    });
 
-    if (darkBtn) {
-        darkBtn.addEventListener("click", function () {
-            setTheme("dark");
-        });
-    }
+    darkButton?.addEventListener("click", function () {
+        setTheme("dark");
+    });
 
-    updateThemeUI();
+    updateThemeButtons();
 });

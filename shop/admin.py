@@ -1,6 +1,8 @@
 from django.contrib import admin
 from .models import Category, Brand, Product
+from .models import Profile
 
+admin.site.register(Profile)
 
 @admin.register(Category)
 class CategoryAdmin(admin.ModelAdmin):

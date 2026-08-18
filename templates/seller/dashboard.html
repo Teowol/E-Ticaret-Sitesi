@@ -1,0 +1,64 @@
+{% extends 'base.html' %}
+{% load i18n %}
+
+{% block title %}{% trans "Satıcı Paneli" %} | ComputerSensei{% endblock %}
+
+{% block content %}
+<div class="container my-5">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h3 class="fw-bold"><i class="bi bi-shop text-custom"></i> {% trans "Satıcı Panelim" %}</h3>
+        <a href="{% url 'seller_product_add' %}" class="btn btn-custom rounded-pill px-4">
+            <i class="bi bi-plus-circle"></i> {% trans "Yeni Ürün Ekle" %}
+        </a>
+    </div>
+
+    <div class="table-responsive">
+        <table class="table align-middle">
+            <thead>
+                <tr>
+                    <th>{% trans "Ürün" %}</th>
+                    <th>{% trans "Kategori" %}</th>
+                    <th>{% trans "Fiyat" %}</th>
+                    <th>{% trans "Stok" %}</th>
+                    <th>{% trans "Aktif" %}</th>
+                    <th>{% trans "İşlemler" %}</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for product in products %}
+                <tr>
+                    <td>{{ product.name }}</td>
+                    <td>{{ product.category.name }}</td>
+                    <td>{{ product.current_price }} TL</td>
+                    <td>{{ product.stock }}</td>
+                    <td>
+                        {% if product.is_active %}
+                        <span class="badge bg-success">{% trans "Evet" %}</span>
+                        {% else %}
+                        <span class="badge bg-secondary">{% trans "Hayır" %}</span>
+                        {% endif %}
+                    </td>
+                    <td>
+                        <a href="{% url 'seller_product_edit' product.pk %}" class="btn btn-sm btn-outline-dark rounded-pill">
+                            <i class="bi bi-pencil"></i>
+                        </a>
+                        <form action="{% url 'seller_product_delete' product.pk %}" method="post" class="d-inline" onsubmit="return confirm('Bu ürünü silmek istediğinize emin misiniz?');">
+                            {% csrf_token %}
+                            <button type="submit" class="btn btn-sm btn-outline-danger rounded-pill">
+                                <i class="bi bi-trash"></i>
+                            </button>
+                        </form>
+                    </td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="6" class="text-center py-4 text-muted">
+                        {% trans "Henüz ürün eklemediniz." %}
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}
