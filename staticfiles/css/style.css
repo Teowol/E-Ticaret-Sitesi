@@ -230,3 +230,58 @@ label {
 footer.bg-custom-dark {
     background-color: var(--navbar-bg) !important;
 }
+
+/* Form input yazı renkleri (kayıt/giriş formları) */
+input,
+textarea,
+select,
+.form-control,
+.form-select {
+    color: #212529 !important;
+    background-color: #ffffff !important;
+    opacity: 1 !important;
+}
+
+[data-theme="dark"] input,
+[data-theme="dark"] textarea,
+[data-theme="dark"] select,
+[data-theme="dark"] .form-control,
+[data-theme="dark"] .form-select {
+    color: #212529 !important;
+    background-color: #ffffff !important;
+}
+
+/* Django'nun otomatik oluşturduğu yardım metinleri (şifre kuralları vb.) */
+.form-text,
+.helptext,
+ul.helptext li,
+.errorlist,
+small.form-text {
+    color: var(--muted-color) !important;
+    opacity: 1 !important;
+}
+
+[data-theme="dark"] .form-text,
+[data-theme="dark"] .helptext,
+[data-theme="dark"] ul.helptext li {
+    color: #cfcfcf !important;
+}
+
+/* Form label'ları (Username, Email address, Password vb.) */
+form label,
+.form-label {
+    color: var(--text-color) !important;
+    opacity: 1 !important;
+}
+
+/* Offcanvas (Görünüm ve Dil Ayarları) paneli */
+.offcanvas,
+.offcanvas-header,
+.offcanvas-body {
+    background-color: var(--card-bg) !important;
+    color: var(--text-color) !important;
+}
+
+.offcanvas-title {
+    color: var(--text-color) !important;
+}
