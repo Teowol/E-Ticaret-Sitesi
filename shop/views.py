@@ -1,5 +1,9 @@
 from django.shortcuts import render, get_object_or_404, redirect
 from django.http import HttpResponseRedirect
+from django.contrib.auth import login, authenticate, logout
+from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
+from django.contrib import messages
+from django.utils.translation import gettext_lazy as _
 from .models import Category, Product
 
 
@@ -62,3 +66,44 @@ def cart_remove(request, product_id):
     cart.pop(str(product_id), None)
     request.session['cart'] = cart
     return redirect('cart_detail')
+
+
+def register_view(request):
+    if request.user.is_authenticated:
+        return redirect('home')
+    if request.method == 'POST':
+        form = UserCreationForm(request.POST)
+        if form.is_valid():
+            user = form.save()
+            login(request, user)
+            messages.success(request, _('Hesabınız başarıyla oluşturuldu! Hoş geldiniz.'))
+            return redirect('home')
+    else:
+        form = UserCreationForm()
+    return render(request, 'accounts/register.html', {'form': form})
+
+
+def login_view(request):
+    if request.user.is_authenticated:
+        return redirect('home')
+    if request.method == 'POST':
+        form = AuthenticationForm(request, data=request.POST)
+        if form.is_valid():
+            username = form.cleaned_data.get('username')
+            password = form.cleaned_data.get('password')
+            user = authenticate(username=username, password=password)
+            if user is not None:
+                login(request, user)
+                messages.success(request, _('Başarıyla giriş yaptınız.'))
+                next_url = request.GET.get('next', 'home')
+                return redirect(next_url)
+        messages.error(request, _('Kullanıcı adı veya şifre hatalı.'))
+    else:
+        form = AuthenticationForm()
+    return render(request, 'accounts/login.html', {'form': form})
+
+
+def logout_view(request):
+    logout(request)
+    messages.info(request, _('Çıkış yapıldı.'))
+    return redirect('home')

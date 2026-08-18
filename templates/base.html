@@ -63,32 +63,53 @@
                 </form>
 
                 <ul class="navbar-nav ms-auto align-items-lg-center gap-2">
-                    <li class="nav-item">
-                        <a class="nav-link text-white" href="/admin/">
-                            <i class="bi bi-shield-lock"></i>
-                            {% trans "Yönetim" %}
-                        </a>
-                    </li>
+                    <!-- KULLANICI GİRİŞ / PROFİL DURUMU -->
+                    {% if user.is_authenticated %}
+                        <li class="nav-item dropdown">
+                            <button class="btn btn-outline-light dropdown-toggle rounded-pill px-3" data-bs-toggle="dropdown" type="button">
+                                <i class="bi bi-person-circle text-custom"></i> {{ user.username }}
+                            </button>
+                            <ul class="dropdown-menu dropdown-menu-end shadow">
+                                {% if user.is_staff %}
+                                <li>
+                                    <a class="dropdown-item" href="/admin/" target="_blank">
+                                        <i class="bi bi-shield-lock me-2 text-warning"></i> {% trans "Yönetim Paneli" %}
+                                    </a>
+                                </li>
+                                <li><hr class="dropdown-divider"></li>
+                                {% endif %}
+                                <li>
+                                    <a class="dropdown-item text-danger" href="{% url 'logout' %}">
+                                        <i class="bi bi-box-arrow-right me-2"></i> {% trans "Çıkış Yap" %}
+                                    </a>
+                                </li>
+                            </ul>
+                        </li>
+                    {% else %}
+                        <li class="nav-item">
+                            <a class="btn btn-outline-light rounded-pill px-3" href="{% url 'login' %}">
+                                <i class="bi bi-box-arrow-in-right"></i> {% trans "Giriş Yap" %}
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="btn btn-custom rounded-pill px-3" href="{% url 'register' %}">
+                                <i class="bi bi-person-plus"></i> {% trans "Kayıt Ol" %}
+                            </a>
+                        </li>
+                    {% endif %}
 
+                    <!-- SEPET BUTONU -->
                     <li class="nav-item">
                         <a class="btn btn-outline-light position-relative rounded-pill px-3" href="#">
-                            <i class="bi bi-cart3"></i>
-                            {% trans "Sepet" %}
-                            <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
-                                0
-                            </span>
+                            <i class="bi bi-cart3"></i> {% trans "Sepet" %}
+                            <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">0</span>
                         </a>
                     </li>
 
+                    <!-- AYARLAR (YAN PANEL) BUTONU -->
                     <li class="nav-item">
-                        <button
-                            class="btn btn-custom rounded-pill px-3"
-                            type="button"
-                            data-bs-toggle="offcanvas"
-                            data-bs-target="#settingsOffcanvas"
-                            aria-controls="settingsOffcanvas">
-                            <i class="bi bi-gear-fill"></i>
-                            {% trans "Ayarlar" %}
+                        <button class="btn btn-custom rounded-pill px-3" type="button" data-bs-toggle="offcanvas" data-bs-target="#settingsOffcanvas">
+                            <i class="bi bi-gear-fill"></i> {% trans "Ayarlar" %}
                         </button>
                     </li>
                 </ul>
@@ -218,11 +239,23 @@
         </div>
     </div>
 
+<!-- MESAJLAR / BİLDİRİMLER -->
+    {% if messages %}
+    <div class="container mt-3">
+        {% for message in messages %}
+        <div class="alert alert-{{ message.tags|default:'info' }} alert-dismissible fade show rounded-pill px-4 shadow-sm" role="alert">
+            {{ message }}
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+        {% endfor %}
+    </div>
+    {% endif %}
+
     <!-- ANA İÇERİK -->
     <main class="flex-grow-1">
         {% block content %}{% endblock %}
     </main>
-
+    
     <!-- FOOTER -->
     <footer class="bg-custom-dark text-secondary pt-5 pb-3 mt-5">
         <div class="container">

@@ -9,4 +9,8 @@ urlpatterns = [
     path('sepet/', views.cart_detail, name='cart_detail'),
     path('sepet/ekle/<int:product_id>/', views.cart_add, name='cart_add'),
     path('sepet/kaldir/<int:product_id>/', views.cart_remove, name='cart_remove'),
+
+    path('kayit/', views.register_view, name='register'),
+    path('giris/', views.login_view, name='login'),
+    path('cikis/', views.logout_view, name='logout'),
 ]

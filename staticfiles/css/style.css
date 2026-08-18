@@ -1,49 +1,53 @@
 :root {
     --primary-color: #ff6000;
-    --dark-color: #171717;
+    --primary-hover: #df5100;
     --body-bg: #f5f6f8;
-    --card-bg: #ffffff;
-    --navbar-bg: #1a1a1a;
-    --header-bg: #ffffff;
+    --surface-bg: #ffffff;
+    --navbar-bg: #171717;
     --text-color: #212529;
     --muted-color: #6c757d;
     --border-color: #dee2e6;
     --input-bg: #ffffff;
-    --btn-outline-color: #212529;
-    --shadow-color: rgba(0, 0, 0, 0.08);
+    --shadow-color: rgba(15, 23, 42, 0.10);
 }
 
 [data-theme="dark"] {
-    --body-bg: #121212;
-    --card-bg: #1e1e1e;
-    --navbar-bg: #000000;
-    --header-bg: #1a1a1a;
-    --text-color: #f1f1f1;
-    --muted-color: #b5b5b5;
-    --border-color: #3a3a3a;
-    --input-bg: #2a2a2a;
-    --btn-outline-color: #f1f1f1;
-    --shadow-color: rgba(0, 0, 0, 0.4);
+    --body-bg: #111827;
+    --surface-bg: #1f2937;
+    --navbar-bg: #0b0f19;
+    --text-color: #f3f4f6;
+    --muted-color: #aeb7c5;
+    --border-color: #374151;
+    --input-bg: #273449;
+    --shadow-color: rgba(0, 0, 0, 0.35);
 }
 
 * {
-    transition: background-color 0.25s ease, color 0.25s ease, border-color 0.25s ease;
+    transition: background-color 0.2s ease, color 0.2s ease, border-color 0.2s ease;
 }
 
 body {
-    background-color: var(--body-bg) !important;
+    background-color: var(--body-bg);
     color: var(--text-color);
 }
 
-/* Üst bilgi barı ve navbar */
 .bg-custom-dark,
-.navbar.bg-dark {
+.navbar.bg-dark,
+footer.bg-custom-dark {
     background-color: var(--navbar-bg) !important;
 }
 
-/* Kategori menüsü */
-.category-nav {
-    background-color: var(--header-bg) !important;
+.search-form {
+    width: min(100%, 520px);
+}
+
+.category-nav,
+.offcanvas,
+.card,
+.dropdown-menu,
+.modal-content {
+    background-color: var(--surface-bg) !important;
+    color: var(--text-color);
     border-color: var(--border-color) !important;
 }
 
@@ -51,58 +55,11 @@ body {
     color: var(--text-color) !important;
 }
 
-.category-nav .nav-link:hover {
+.category-nav .nav-link:hover,
+.category-nav .nav-link.active {
     color: var(--primary-color) !important;
 }
 
-/* Kartlar */
-.card,
-.modal-content,
-.dropdown-menu {
-    background-color: var(--card-bg);
-    color: var(--text-color);
-    border-color: var(--border-color) !important;
-}
-
-.card,
-.shadow-sm {
-    box-shadow: 0 2px 10px var(--shadow-color) !important;
-}
-
-.dropdown-item {
-    color: var(--text-color);
-}
-
-.dropdown-item:hover {
-    background-color: var(--body-bg);
-    color: var(--primary-color);
-}
-
-/* Metin renkleri */
-.text-dark,
-.card-title,
-.card h1,
-.card h2,
-.card h3,
-.card h4,
-.card h5,
-.card h6 {
-    color: var(--text-color) !important;
-}
-
-.text-muted,
-.text-secondary {
-    color: var(--muted-color) !important;
-}
-
-/* Kenarlıklar */
-.border,
-.border-bottom,
-.border-top {
-    border-color: var(--border-color) !important;
-}
-
-/* Arama kutusu */
 .form-control {
     background-color: var(--input-bg);
     color: var(--text-color);
@@ -116,177 +73,117 @@ body {
 .form-control:focus {
     background-color: var(--input-bg);
     color: var(--text-color);
-    box-shadow: 0 0 0 0.2rem rgba(255, 96, 0, 0.25);
     border-color: var(--primary-color);
+    box-shadow: 0 0 0 0.2rem rgba(255, 96, 0, 0.22);
 }
 
-/* Dışı çizgili (outline) butonlar */
-.btn-outline-dark {
-    color: var(--btn-outline-color);
-    border-color: var(--btn-outline-color);
-}
-
-.btn-outline-dark:hover {
-    background-color: var(--primary-color);
-    border-color: var(--primary-color);
-    color: #fff;
-}
-
-/* Footer */
-footer.bg-custom-dark {
-    background-color: var(--navbar-bg) !important;
-}
-
-/* Kartlar için hover efekti */
-.product-card {
-    transition: transform 0.2s, box-shadow 0.2s, background-color 0.25s, border-color 0.25s;
-    border-radius: 12px;
-}
-
-.product-card:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 10px 20px var(--shadow-color) !important;
-}
-
-.product-img {
-    height: 200px;
-    object-fit: contain;
-}
-
-/* Marka renkleri */
 .btn-custom {
     background-color: var(--primary-color);
-    color: white;
-    border: none;
+    border-color: var(--primary-color);
+    color: #ffffff;
 }
 
-.btn-custom:hover {
-    background-color: #e05500;
-    color: white;
+.btn-custom:hover,
+.btn-custom:focus {
+    background-color: var(--primary-hover);
+    border-color: var(--primary-hover);
+    color: #ffffff;
 }
 
 .text-custom {
-    color: var(--primary-color);
+    color: var(--primary-color) !important;
 }
-/* Hero alanı */
-.hero-banner {
-    background: linear-gradient(135deg, #111111 0%, #292929 100%);
-    color: #ffffff !important;
-    min-height: 270px;
+
+.btn-outline-dark {
+    color: var(--text-color);
+    border-color: var(--border-color);
+}
+
+.btn-outline-dark:hover,
+.btn-outline-dark.active {
+    color: #ffffff;
+    background-color: var(--primary-color);
+    border-color: var(--primary-color);
+}
+
+.settings-choice {
+    min-height: 52px;
     display: flex;
-    flex-direction: column;
-    justify-content: center;
     align-items: center;
-    text-align: center;
+    justify-content: space-between;
+    text-align: left;
 }
 
-.hero-banner h1,
-.hero-banner p,
-.hero-banner .lead {
-    color: #ffffff !important;
-}
-
-.hero-banner h1 {
-    font-size: clamp(1.8rem, 4vw, 3rem);
-    font-weight: 800;
-    letter-spacing: -0.5px;
-}
-
-.hero-banner p {
-    opacity: 0.8;
-}
-
-/* Ürün başlığı */
-.products-heading {
-    color: var(--text-color) !important;
-    font-weight: 800;
-}
-
-/* Ürün kartı */
 .product-card {
-    background-color: var(--card-bg) !important;
-    color: var(--text-color) !important;
+    background-color: var(--surface-bg) !important;
     border: 1px solid var(--border-color) !important;
     border-radius: 16px;
     overflow: hidden;
-    height: 100%;
-    transition:
-        transform 0.25s ease,
-        box-shadow 0.25s ease,
-        border-color 0.25s ease;
+    transition: transform 0.25s ease, box-shadow 0.25s ease, border-color 0.25s ease;
 }
 
 .product-card:hover {
     transform: translateY(-6px);
     border-color: var(--primary-color) !important;
-    box-shadow: 0 12px 28px var(--shadow-color) !important;
+    box-shadow: 0 14px 30px var(--shadow-color) !important;
 }
 
-.product-card .product-image-wrapper {
+.product-image-wrapper {
     height: 210px;
     padding: 18px;
     display: flex;
     align-items: center;
     justify-content: center;
-    background-color: var(--card-bg);
+    background-color: var(--surface-bg);
 }
 
-.product-card .product-img {
+.product-img {
     width: 100%;
     height: 175px;
     object-fit: contain;
 }
 
-.product-card .card-body {
-    background-color: var(--card-bg);
-}
-
-.product-card .product-brand {
+.product-brand,
+.old-price,
+.text-muted,
+.text-secondary {
     color: var(--muted-color) !important;
-    font-size: 0.8rem;
 }
 
-.product-card .product-name {
+.product-name,
+.products-heading {
     color: var(--text-color) !important;
-    min-height: 44px;
-    line-height: 1.35;
 }
 
-.product-card .old-price {
-    color: var(--muted-color) !important;
-}
-
-.product-card .current-price {
+.current-price {
     color: var(--primary-color) !important;
     font-size: 1.25rem;
     font-weight: 800;
 }
 
-/* Kategori menüsü */
-.category-nav {
-    background-color: var(--header-bg) !important;
+.hero-banner {
+    min-height: 270px;
+    padding: 3rem 1.5rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    background: linear-gradient(135deg, #111827 0%, #293548 100%);
+    color: #ffffff;
 }
 
-.category-nav .nav-link {
-    color: var(--text-color) !important;
-    font-weight: 500;
+.hero-banner h1,
+.hero-banner p {
+    color: #ffffff !important;
 }
 
-.category-nav .nav-link:hover,
-.category-nav .nav-link.active {
-    color: var(--primary-color) !important;
+.hero-banner p {
+    opacity: 0.82;
 }
 
-/* Tema geçişi */
-body,
-.card,
-.card-body,
-.category-nav,
-.dropdown-menu,
-.form-control,
-.product-image-wrapper {
-    transition:
-        background-color 0.25s ease,
-        color 0.25s ease,
-        border-color 0.25s ease;
+@media (max-width: 991.98px) {
+    .search-form {
+        width: 100%;
+    }
 }
