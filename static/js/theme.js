@@ -1,36 +1,43 @@
 (function () {
-    const savedTheme = localStorage.getItem("theme") || "light";
+    const savedTheme = localStorage.getItem("computersensei-theme") || "light";
     document.documentElement.setAttribute("data-theme", savedTheme);
 })();
 
 document.addEventListener("DOMContentLoaded", function () {
-    const themeButton = document.getElementById("themeToggle");
+    const lightButton = document.getElementById("themeLightBtn");
+    const darkButton = document.getElementById("themeDarkBtn");
+    const lightCheck = document.querySelector(".theme-check-light");
+    const darkCheck = document.querySelector(".theme-check-dark");
 
-    function updateThemeButton() {
-        const theme = document.documentElement.getAttribute("data-theme");
-        const icon = themeButton.querySelector("i");
-        const text = themeButton.querySelector("span");
+    function updateThemeButtons() {
+        const currentTheme = document.documentElement.getAttribute("data-theme");
 
-        if (theme === "koyu") {
-            icon.className = "bi bi-sun-fill";
-            text.textContent = " Açık";
+        if (currentTheme === "dark") {
+            lightButton?.classList.remove("active");
+            darkButton?.classList.add("active");
+            lightCheck?.classList.add("d-none");
+            darkCheck?.classList.remove("d-none");
         } else {
-            icon.className = "bi bi-moon-fill";
-            text.textContent = " Koyu";
+            lightButton?.classList.add("active");
+            darkButton?.classList.remove("active");
+            lightCheck?.classList.remove("d-none");
+            darkCheck?.classList.add("d-none");
         }
     }
 
-    updateThemeButton();
+    function setTheme(theme) {
+        document.documentElement.setAttribute("data-theme", theme);
+        localStorage.setItem("computersensei-theme", theme);
+        updateThemeButtons();
+    }
 
-    themeButton.addEventListener("click", function () {
-        const currentTheme =
-            document.documentElement.getAttribute("data-theme");
-
-        const newTheme = currentTheme === "dark" ? "light" : "dark";
-
-        document.documentElement.setAttribute("data-theme", newTheme);
-        localStorage.setItem("theme", newTheme);
-
-        updateThemeButton();
+    lightButton?.addEventListener("click", function () {
+        setTheme("light");
     });
+
+    darkButton?.addEventListener("click", function () {
+        setTheme("dark");
+    });
+
+    updateThemeButtons();
 });

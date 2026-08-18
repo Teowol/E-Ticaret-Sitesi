@@ -1,36 +1,47 @@
+// Sayfa yüklenmeden önce tema ayarını uygula (ekran yanıp sönmesini engeller)
 (function () {
     const savedTheme = localStorage.getItem("theme") || "light";
     document.documentElement.setAttribute("data-theme", savedTheme);
 })();
 
 document.addEventListener("DOMContentLoaded", function () {
-    const themeButton = document.getElementById("themeToggle");
+    const lightBtn = document.getElementById("themeLightBtn");
+    const darkBtn = document.getElementById("themeDarkBtn");
+    const checkLight = document.querySelector(".theme-check-light");
+    const checkDark = document.querySelector(".theme-check-dark");
 
-    function updateThemeButton() {
-        const theme = document.documentElement.getAttribute("data-theme");
-        const icon = themeButton.querySelector("i");
-        const text = themeButton.querySelector("span");
-
-        if (theme === "dark") {
-            icon.className = "bi bi-sun-fill";
-            text.textContent = " Açık";
+    function updateThemeUI() {
+        const currentTheme = document.documentElement.getAttribute("data-theme") || "light";
+        if (currentTheme === "dark") {
+            if (checkDark) checkDark.classList.remove("d-none");
+            if (checkLight) checkLight.classList.add("d-none");
+            if (darkBtn) darkBtn.classList.add("active");
+            if (lightBtn) lightBtn.classList.remove("active");
         } else {
-            icon.className = "bi bi-moon-fill";
-            text.textContent = " Koyu";
+            if (checkLight) checkLight.classList.remove("d-none");
+            if (checkDark) checkDark.classList.add("d-none");
+            if (lightBtn) lightBtn.classList.add("active");
+            if (darkBtn) darkBtn.classList.remove("active");
         }
     }
 
-    updateThemeButton();
+    function setTheme(theme) {
+        document.documentElement.setAttribute("data-theme", theme);
+        localStorage.setItem("theme", theme);
+        updateThemeUI();
+    }
 
-    themeButton.addEventListener("click", function () {
-        const currentTheme =
-            document.documentElement.getAttribute("data-theme");
+    if (lightBtn) {
+        lightBtn.addEventListener("click", function () {
+            setTheme("light");
+        });
+    }
 
-        const newTheme = currentTheme === "dark" ? "light" : "dark";
+    if (darkBtn) {
+        darkBtn.addEventListener("click", function () {
+            setTheme("dark");
+        });
+    }
 
-        document.documentElement.setAttribute("data-theme", newTheme);
-        localStorage.setItem("theme", newTheme);
-
-        updateThemeButton();
-    });
+    updateThemeUI();
 });
