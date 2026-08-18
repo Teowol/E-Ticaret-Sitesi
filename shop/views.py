@@ -2,12 +2,10 @@ from django.shortcuts import render, get_object_or_404, redirect
 from django.http import HttpResponseRedirect
 from django.contrib.auth import login, authenticate, logout
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
+from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from django.utils.translation import gettext_lazy as _
 from .models import Category, Product
-from django.contrib.auth.decorators import login_required
-from django.contrib.auth import login
-from django.contrib import messages
 from .forms import SellerRegistrationForm, ProductForm
 
 def home(request):
@@ -41,35 +39,107 @@ def product_detail(request, slug):
 def cart_detail(request):
     cart = request.session.get('cart', {})
     cart_items = []
-    for product_id, quantity in cart.items():
-        product = get_object_or_404(Product, pk=product_id)
+    total_price = 0
+
+    for product_id, quantity in list(cart.items()):
+        product = Product.objects.filter(
+            pk=product_id,
+            is_active=True,
+        ).first()
+
+        if product is None:
+            cart.pop(product_id, None)
+            request.session['cart'] = cart
+            request.session.modified = True
+            continue
+
+        item_total = product.current_price * quantity
+        total_price += item_total
+
         cart_items.append({
             'product': product,
             'quantity': quantity,
-            'total': product.current_price * quantity,
+            'total': item_total,
         })
+
     return render(request, 'cart_detail.html', {
         'cart_items': cart_items,
+        'total_price': total_price,
         'categories': Category.objects.all(),
     })
 
-
 def cart_add(request, product_id):
     if request.method == 'POST':
-        quantity = int(request.POST.get('quantity', 1))
-        product = get_object_or_404(Product, pk=product_id)
+        product = get_object_or_404(Product, pk=product_id, is_active=True)
         cart = request.session.get('cart', {})
-        cart[str(product.id)] = min(quantity, product.stock or quantity)
-        request.session['cart'] = cart
-    return redirect('cart_detail')
 
+        try:
+            quantity = int(request.POST.get('quantity', 1))
+        except (TypeError, ValueError):
+            quantity = 1
+
+        quantity = max(quantity, 1)
+        current_quantity = cart.get(str(product.id), 0)
+        new_quantity = current_quantity + quantity
+
+        if product.stock <= 0:
+            messages.warning(request, f"{product.name} stokta yok.")
+            return redirect(request.META.get('HTTP_REFERER', 'home'))
+
+        if new_quantity > product.stock:
+            new_quantity = product.stock
+            messages.warning(
+                request,
+                f"{product.name} için stoktaki maksimum adede ulaşıldı."
+            )
+        else:
+            messages.success(request, f"{product.name} sepete eklendi.")
+
+        cart[str(product.id)] = new_quantity
+        request.session['cart'] = cart
+        request.session.modified = True
+
+    return redirect(request.META.get('HTTP_REFERER', 'home'))
+
+def cart_update(request, product_id):
+    if request.method == 'POST':
+        product = get_object_or_404(Product, pk=product_id, is_active=True)
+        cart = request.session.get('cart', {})
+
+        try:
+            quantity = int(request.POST.get('quantity', 1))
+        except (TypeError, ValueError):
+            quantity = 1
+
+        if quantity <= 0:
+            cart.pop(str(product.id), None)
+            messages.info(request, f"{product.name} sepetten kaldırıldı.")
+        elif quantity > product.stock:
+            cart[str(product.id)] = product.stock
+            messages.warning(
+                request,
+                f"{product.name} için stoktaki maksimum adet uygulandı."
+            )
+        else:
+            cart[str(product.id)] = quantity
+            messages.success(request, "Sepet güncellendi.")
+
+        request.session['cart'] = cart
+        request.session.modified = True
+
+    return redirect('cart_detail')
 
 def cart_remove(request, product_id):
-    cart = request.session.get('cart', {})
-    cart.pop(str(product_id), None)
-    request.session['cart'] = cart
-    return redirect('cart_detail')
+    if request.method == 'POST':
+        cart = request.session.get('cart', {})
 
+        if str(product_id) in cart:
+            cart.pop(str(product_id))
+            request.session['cart'] = cart
+            request.session.modified = True
+            messages.info(request, "Ürün sepetten kaldırıldı.")
+
+    return redirect('cart_detail')
 
 def register_view(request):
     if request.user.is_authenticated:
@@ -178,3 +248,4 @@ def seller_product_delete(request, pk):
         product.delete()
         messages.success(request, 'Ürün silindi.')
     return redirect('seller_dashboard')
+
