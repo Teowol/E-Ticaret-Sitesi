@@ -5,7 +5,10 @@ from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 from django.contrib import messages
 from django.utils.translation import gettext_lazy as _
 from .models import Category, Product
-
+from django.contrib.auth.decorators import login_required
+from django.contrib.auth import login
+from django.contrib import messages
+from .forms import SellerRegistrationForm, ProductForm
 
 def home(request):
     categories = Category.objects.all()
@@ -107,3 +110,71 @@ def logout_view(request):
     logout(request)
     messages.info(request, _('Çıkış yapıldı.'))
     return redirect('home')
+
+def is_seller(user):
+    return hasattr(user, 'profile') and user.profile.is_seller
+
+
+def seller_register_view(request):
+    if request.user.is_authenticated:
+        return redirect('home')
+    if request.method == 'POST':
+        form = SellerRegistrationForm(request.POST)
+        if form.is_valid():
+            user = form.save()
+            login(request, user)
+            messages.success(request, 'Satıcı hesabınız oluşturuldu! Artık ürün ekleyebilirsiniz.')
+            return redirect('seller_dashboard')
+    else:
+        form = SellerRegistrationForm()
+    return render(request, 'accounts/seller_register.html', {'form': form})
+
+
+@login_required
+def seller_dashboard(request):
+    if not is_seller(request.user):
+        messages.error(request, 'Bu sayfaya erişim yetkiniz yok.')
+        return redirect('home')
+    products = Product.objects.filter(seller=request.user)
+    return render(request, 'seller/dashboard.html', {'products': products})
+
+
+@login_required
+def seller_product_add(request):
+    if not is_seller(request.user):
+        messages.error(request, 'Bu sayfaya erişim yetkiniz yok.')
+        return redirect('home')
+    if request.method == 'POST':
+        form = ProductForm(request.POST, request.FILES)
+        if form.is_valid():
+            product = form.save(commit=False)
+            product.seller = request.user
+            product.save()
+            messages.success(request, 'Ürün başarıyla eklendi.')
+            return redirect('seller_dashboard')
+    else:
+        form = ProductForm()
+    return render(request, 'seller/product_form.html', {'form': form, 'title': 'Ürün Ekle'})
+
+
+@login_required
+def seller_product_edit(request, pk):
+    product = get_object_or_404(Product, pk=pk, seller=request.user)
+    if request.method == 'POST':
+        form = ProductForm(request.POST, request.FILES, instance=product)
+        if form.is_valid():
+            form.save()
+            messages.success(request, 'Ürün güncellendi.')
+            return redirect('seller_dashboard')
+    else:
+        form = ProductForm(instance=product)
+    return render(request, 'seller/product_form.html', {'form': form, 'title': 'Ürünü Düzenle'})
+
+
+@login_required
+def seller_product_delete(request, pk):
+    product = get_object_or_404(Product, pk=pk, seller=request.user)
+    if request.method == 'POST':
+        product.delete()
+        messages.success(request, 'Ürün silindi.')
+    return redirect('seller_dashboard')

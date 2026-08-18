@@ -13,4 +13,10 @@ urlpatterns = [
     path('kayit/', views.register_view, name='register'),
     path('giris/', views.login_view, name='login'),
     path('cikis/', views.logout_view, name='logout'),
+
+    path('satici/kayit/', views.seller_register_view, name='seller_register'),
+    path('satici/panel/', views.seller_dashboard, name='seller_dashboard'),
+    path('satici/urun-ekle/', views.seller_product_add, name='seller_product_add'),
+    path('satici/urun/<int:pk>/duzenle/', views.seller_product_edit, name='seller_product_edit'),
+    path('satici/urun/<int:pk>/sil/', views.seller_product_delete, name='seller_product_delete'),
 ]
