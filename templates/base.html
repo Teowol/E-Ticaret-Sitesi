@@ -49,12 +49,13 @@
             </button>
 
             <div class="collapse navbar-collapse" id="navContent">
-                <form class="d-flex mx-auto my-2 my-lg-0 search-form" method="get" action="{% url 'home' %}">
+                <form class="d-flex mx-auto my-2 my-lg-0 search-form" method="get" action="{% url 'search_results' %}">
                     <div class="input-group">
                         <input
                             class="form-control rounded-start-pill"
                             type="search"
                             name="q"
+                            value="{{ query|default:'' }}"
                             placeholder="{% trans 'İşlemci, ekran kartı, hazır sistem ara...' %}">
                         <button class="btn btn-custom rounded-end-pill px-4" type="submit" aria-label="Ara">
                             <i class="bi bi-search"></i>

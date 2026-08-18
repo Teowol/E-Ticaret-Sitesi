@@ -20,4 +20,6 @@ urlpatterns = [
     path('satici/urun-ekle/', views.seller_product_add, name='seller_product_add'),
     path('satici/urun/<int:pk>/duzenle/', views.seller_product_edit, name='seller_product_edit'),
     path('satici/urun/<int:pk>/sil/', views.seller_product_delete, name='seller_product_delete'),
+
+    path('arama/', views.search_results, name='search_results'),
 ]

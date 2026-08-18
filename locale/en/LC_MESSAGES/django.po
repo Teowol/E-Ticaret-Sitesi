@@ -1,148 +1,203 @@
-# SOME DESCRIPTIVE TITLE.
-# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
-# This file is distributed under the same license as the PACKAGE package.
-# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
-#
-#, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: PACKAGE VERSION\n"
+"Project-Id-Version: ComputerSensei 1.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-08-18 11:20+0300\n"
-"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
-"Language-Team: LANGUAGE <LL@li.org>\n"
+"POT-Creation-Date: 2026-08-18 12:00+0000\n"
+"PO-Revision-Date: 2026-08-18 12:00+0000\n"
+"Last-Translator: Admin <admin@computersensei.com>\n"
+"Language-Team: English\n"
 "Language: en\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
-#: templates/base.html:24
+#: templates/base.html
 msgid "500 TL Üzeri Ücretsiz Kargo"
-msgstr "Free shipping over 500 TL"
+msgstr "Free Shipping Over 500 TL"
 
-#: templates/base.html:28
 msgid "Canlı Destek & Müşteri Hizmetleri"
 msgstr "Live Support & Customer Service"
 
-#: templates/base.html:58
 msgid "İşlemci, ekran kartı, hazır sistem ara..."
-msgstr "Search for processor, graphics card, ready-made PC..."
+msgstr "Search for CPU, GPU, Gaming PC..."
 
-#: templates/base.html:69
-msgid "Yönetim"
-msgstr "Admin"
+msgid "Tema"
+msgstr "Theme"
 
-#: templates/base.html:76
-msgid "Sepet"
-msgstr "Cart"
+msgid "Aydınlık"
+msgstr "Light"
 
-#: templates/base.html:91
-msgid "Ayarlar"
-msgstr "Settings"
+msgid "Karanlık"
+msgstr "Dark"
 
-#: templates/base.html:106
-msgid "Tümü"
-msgstr "All"
+msgid "Dil"
+msgstr "Language"
 
-#: templates/base.html:131
-msgid "Görünüm ve Dil Ayarları"
-msgstr "Display and Language Settings"
-
-#: templates/base.html:147
-msgid "Tema Tercihi"
-msgstr "Theme Preference"
-
-#: templates/base.html:157
-msgid "Açık Tema"
-msgstr "Light Theme"
-
-#: templates/base.html:168
-msgid "Karanlık Tema"
-msgstr "Dark Theme"
-
-#: templates/base.html:181
-msgid "Dil Seçimi"
-msgstr "Language Selection"
-
-#: templates/base.html:193
 msgid "Türkçe"
 msgstr "Turkish"
 
-#: templates/base.html:209
 msgid "English"
 msgstr "English"
 
-#: templates/base.html:235
-msgid ""
-"En yeni donanım bileşenleri, oyuncu ekipmanları ve hazır sistemler en uygun "
-"fiyatlarla burada."
-msgstr ""
-"The latest hardware components, gaming gear, and ready-made systems at the most "
-"competitive prices."
+msgid "Kaydet"
+msgstr "Save"
 
-#: templates/base.html:240
+msgid "Ayarlar"
+msgstr "Settings"
+
+msgid "Yönetim"
+msgstr "Admin"
+
+msgid "Yönetim Paneli"
+msgstr "Admin Panel"
+
+msgid "Sepet"
+msgstr "Cart"
+
+msgid "Tümü"
+msgstr "All"
+
+msgid "Tüm Kategoriler"
+msgstr "All Categories"
+
+msgid "Giriş Yap"
+msgstr "Log In"
+
+msgid "Kayıt Ol"
+msgstr "Sign Up"
+
+msgid "Çıkış Yap"
+msgstr "Log Out"
+
+msgid "Satıcı Ol"
+msgstr "Become a Seller"
+
+msgid "Satıcı Panelim"
+msgstr "Seller Dashboard"
+
+msgid "Panelim"
+msgstr "Dashboard"
+
+msgid "Ürün Ekle"
+msgstr "Add Product"
+
+msgid "Yeni Ürün Ekle"
+msgstr "Add New Product"
+
+msgid "En yeni donanım bileşenleri, oyuncu ekipmanları ve hazır sistemler en uygun fiyatlarla burada."
+msgstr "The latest hardware components, gaming gear, and pre-built systems at the best prices."
+
 msgid "Popüler Kategoriler"
 msgstr "Popular Categories"
 
-#: templates/base.html:242
 msgid "Hazır Gaming Sistemler"
-msgstr "Gaming PCs"
+msgstr "Prebuilt Gaming PCs"
 
-#: templates/base.html:243
 msgid "Ekran Kartları (GPU)"
 msgstr "Graphics Cards (GPU)"
 
-#: templates/base.html:244
 msgid "İşlemciler (CPU)"
 msgstr "Processors (CPU)"
 
-#: templates/base.html:249
 msgid "Güvenli Alışveriş"
 msgstr "Secure Shopping"
 
-#: templates/base.html:251
 msgid "256-bit SSL Güvenliği ile tüm ödemeleriniz koruma altındadır."
-msgstr "All your payments are protected with 256-bit SSL security."
+msgstr "All your payments are protected with 256-bit SSL encryption."
 
-#: templates/base.html:259
-msgid "Tüm hakları saklıdır."
-msgstr "All rights reserved."
-
-#: templates/home.html:5
+#: templates/home.html
 msgid "Ana Sayfa"
 msgstr "Home"
 
-#: templates/home.html:13
 msgid "UYGUN FİYATA HAYALİNDEKİ BİLGİSAYARI AL"
-msgstr "GET THE PC OF YOUR DREAMS AT THE RIGHT PRICE"
+msgstr "GET YOUR DREAM PC AT THE BEST PRICE"
 
-#: templates/home.html:14
 msgid "En güçlü hazır sistemler ve yeni nesil ekran kartları stoklarda!"
-msgstr "The most powerful systems and next-gen graphics cards are in stock!"
+msgstr "Top gaming rigs and next-gen graphics cards are in stock!"
 
-#: templates/home.html:15
 msgid "Fırsatları İncele"
 msgstr "Explore Deals"
 
-#: templates/home.html:21
 msgid "Öne Çıkan Ürünler"
 msgstr "Featured Products"
 
-#: templates/home.html:59
 msgid "Sepete Ekle"
 msgstr "Add to Cart"
 
-#: templates/home.html:69
-msgid "Henüz öne çıkan ürün eklenmemiş."
-msgstr "No featured products have been added yet."
+msgid "Tükendi"
+msgstr "Out of Stock"
 
-#: templates/home.html:70
-msgid ""
-"Admin panelinden ürün eklerken \"Öne Çıkan (is_featured)\" seçeneğini "
-"işaretlemeyi unutmayın."
-msgstr ""
-"When adding products in the admin panel, don't forget to check \"Featured "
-"(is_featured)\"."
+#: templates/cart_detail.html
+msgid "Alışveriş Sepetim"
+msgstr "My Shopping Cart"
 
+msgid "Ürün"
+msgstr "Product"
+
+msgid "Fiyat"
+msgstr "Price"
+
+msgid "Adet"
+msgstr "Quantity"
+
+msgid "Toplam"
+msgstr "Total"
+
+msgid "Kaldır"
+msgstr "Remove"
+
+msgid "Sepetten kaldır"
+msgstr "Remove from cart"
+
+msgid "Alışverişe Devam Et"
+msgstr "Continue Shopping"
+
+msgid "Sipariş Özeti"
+msgstr "Order Summary"
+
+msgid "Ara Toplam"
+msgstr "Subtotal"
+
+msgid "Kargo"
+msgstr "Shipping"
+
+msgid "Ücretsiz"
+msgstr "Free"
+
+msgid "Genel Toplam"
+msgstr "Grand Total"
+
+msgid "Alışverişi Tamamla"
+msgstr "Proceed to Checkout"
+
+msgid "Sepetiniz henüz boş"
+msgstr "Your cart is currently empty"
+
+msgid "İhtiyacınız olan parçaları hemen inceleyin ve sepetinize ekleyin."
+msgstr "Explore the computer components you need and add them to your cart."
+
+msgid "Alışverişe Başla"
+msgstr "Start Shopping"
+
+#: templates/accounts/
+msgid "Hesabınıza erişmek için bilgilerinizi girin."
+msgstr "Enter your credentials to access your account."
+
+msgid "Kullanıcı Adı"
+msgstr "Username"
+
+msgid "Şifre"
+msgstr "Password"
+
+msgid "Henüz hesabınız yok mu?"
+msgstr "Don't have an account yet?"
+
+msgid "Hemen Kaydol"
+msgstr "Sign Up Now"
+
+msgid "Zaten hesabınız var mı?"
+msgstr "Already have an account?"
+
+msgid "Hemen üye olun, avantajlı fiyatlardan yararlanın."
+msgstr "Join now and enjoy exclusive member discounts."

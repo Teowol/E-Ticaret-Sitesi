@@ -7,6 +7,7 @@ from django.contrib import messages
 from django.utils.translation import gettext_lazy as _
 from .models import Category, Product
 from .forms import SellerRegistrationForm, ProductForm
+from django.db import models
 
 def home(request):
     categories = Category.objects.all()
@@ -249,3 +250,24 @@ def seller_product_delete(request, pk):
         messages.success(request, 'Ürün silindi.')
     return redirect('seller_dashboard')
 
+def search_results(request):
+    query = request.GET.get('q', '').strip()
+    categories = Category.objects.all()
+
+    if query:
+        featured_products = Product.objects.filter(
+            is_active=True,
+        ).filter(
+            models.Q(name__icontains=query) |
+            models.Q(description__icontains=query) |
+            models.Q(brand__name__icontains=query) |
+            models.Q(category__name__icontains=query)
+        ).distinct()
+    else:
+        featured_products = Product.objects.none()
+
+    return render(request, 'search_results.html', {
+        'categories': categories,
+        'featured_products': featured_products,
+        'query': query,
+    })
