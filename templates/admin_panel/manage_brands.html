@@ -19,7 +19,23 @@
                     {% for field in form %}
                     <div class="mb-3">
                         <label class="form-label fw-semibold">{{ field.label }}</label>
-                        {{ field }}
+
+                        {% if field.field.widget.allow_multiple_selected %}
+                            <div class="row g-2 border rounded-3 p-3" style="border-color: var(--border-color) !important;">
+                                {% for checkbox in field %}
+                                <div class="col-6 col-md-4">
+                                    <div class="form-check">
+                                        {{ checkbox.tag }}
+                                        <label class="form-check-label" for="{{ checkbox.id_for_label }}">
+                                            {{ checkbox.choice_label }}
+                                        </label>
+                                    </div>
+                                </div>
+                                {% endfor %}
+                            </div>
+                        {% else %}
+                            {{ field }}
+                        {% endif %}
                     </div>
                     {% endfor %}
                     <button type="submit" class="btn btn-custom rounded-pill px-4 fw-semibold w-100">
@@ -36,9 +52,18 @@
                     {% for brand in brands %}
                     <li class="list-group-item d-flex justify-content-between align-items-center px-0">
                         {{ brand.name }}
-                        <a href="{% url 'edit_brand' brand.pk %}" class="btn btn-sm btn-outline-dark rounded-pill px-3">
-                            <i class="bi bi-pencil"></i> {% trans "Düzenle" %}
-                        </a>
+                        <div class="d-flex gap-2">
+                            <a href="{% url 'edit_brand' brand.pk %}" class="btn btn-sm btn-outline-dark rounded-pill px-3">
+                                <i class="bi bi-pencil"></i> {% trans "Düzenle" %}
+                            </a>
+                            <form method="post" action="#" style="display:inline;" onsubmit="return confirm('{% trans "Bu markayı silmek istediğinize emin misiniz?" %}');">
+                                {% csrf_token %}
+                                <input type="hidden" name="delete_brand_id" value="{{ brand.pk }}">
+                                <button type="submit" class="btn btn-sm btn-outline-danger rounded-pill px-3">
+                                    <i class="bi bi-trash"></i> {% trans "Sil" %}
+                                </button>
+                            </form>
+                        </div>
                     </li>
                     {% empty %}
                     <li class="list-group-item px-0 text-muted">{% trans "Henüz marka yok." %}</li>

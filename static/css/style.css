@@ -294,3 +294,184 @@ form span:not(.input-group-text) {
     color: var(--text-color) !important;
     opacity: 1 !important;
 }
+
+/* =========================================
+   FORM VE YÖNETİM PANELİ TASARIMI
+   ========================================= */
+
+/* Django formlarındaki alanlar */
+.form-control,
+.form-select,
+input[type="text"],
+input[type="email"],
+input[type="password"],
+input[type="number"],
+input[type="url"],
+input[type="file"],
+select,
+textarea {
+    width: 100%;
+    min-height: 46px;
+    padding: 0.7rem 0.95rem;
+    background-color: var(--input-bg) !important;
+    color: var(--text-color) !important;
+    border: 1px solid var(--border-color) !important;
+    border-radius: 10px;
+    font-size: 0.95rem;
+    transition:
+        border-color 0.2s ease,
+        box-shadow 0.2s ease,
+        background-color 0.2s ease;
+}
+
+/* Textarea yüksekliği */
+textarea {
+    min-height: 120px;
+    resize: vertical;
+}
+
+/* Dosya yükleme alanı */
+input[type="file"] {
+    padding: 0.55rem 0.75rem;
+}
+
+/* Alan seçildiğinde */
+.form-control:focus,
+.form-select:focus,
+input:focus,
+select:focus,
+textarea:focus {
+    background-color: var(--input-bg) !important;
+    color: var(--text-color) !important;
+    border-color: var(--primary-color) !important;
+    outline: none;
+    box-shadow: 0 0 0 0.22rem rgba(255, 96, 0, 0.2) !important;
+}
+
+/* Placeholder */
+.form-control::placeholder,
+input::placeholder,
+textarea::placeholder {
+    color: var(--muted-color) !important;
+    opacity: 0.85;
+}
+
+/* Form etiketleri */
+.form-label,
+label {
+    color: var(--text-color);
+    font-weight: 600;
+    margin-bottom: 0.45rem;
+}
+
+/* Django yardım metinleri */
+.helptext,
+.form-text,
+.form-text small {
+    color: var(--muted-color) !important;
+    font-size: 0.82rem;
+}
+
+/* Django hata listeleri */
+.errorlist {
+    list-style: none;
+    padding: 0.75rem 1rem;
+    margin: 0 0 1rem;
+    color: #b42318;
+    background-color: #fef3f2;
+    border: 1px solid #fecdca;
+    border-radius: 10px;
+    font-size: 0.88rem;
+}
+
+[data-theme="dark"] .errorlist {
+    color: #ffb4ab;
+    background-color: #3b1917;
+    border-color: #7a2e28;
+}
+
+/* Yönetim paneli listeleri */
+.list-group-item {
+    background-color: var(--card-bg) !important;
+    color: var(--text-color) !important;
+    border-color: var(--border-color) !important;
+}
+
+.list-group-item a:not(.btn) {
+    color: var(--text-color);
+}
+
+.list-group-item a:not(.btn):hover {
+    color: var(--primary-color);
+}
+
+/* Yönetim paneli tabloları */
+.table {
+    color: var(--text-color) !important;
+    border-color: var(--border-color) !important;
+}
+
+.table th,
+.table td {
+    color: var(--text-color) !important;
+    border-color: var(--border-color) !important;
+    background-color: transparent !important;
+}
+
+.table thead th {
+    color: var(--muted-color) !important;
+}
+
+/* Düzenle butonları */
+.btn-outline-dark {
+    color: var(--btn-outline-color) !important;
+    border-color: var(--btn-outline-color) !important;
+    background-color: transparent;
+}
+
+.btn-outline-dark:hover {
+    color: #ffffff !important;
+    background-color: var(--primary-color) !important;
+    border-color: var(--primary-color) !important;
+}
+
+/* Checkbox ve radio alanları */
+input[type="checkbox"],
+input[type="radio"] {
+    width: 18px;
+    height: 18px;
+    accent-color: var(--primary-color);
+}
+
+/* Koyu temada Bootstrap kart ve liste bileşenleri */
+[data-theme="dark"] .list-group,
+[data-theme="dark"] .list-group-item,
+[data-theme="dark"] .table {
+    background-color: var(--card-bg) !important;
+}
+
+[data-theme="dark"] .form-check-label {
+    color: var(--text-color) !important;
+}
+
+/* Koyu temada Bootstrap form alanlarının browser varsayılanını düzelt */
+[data-theme="dark"] input,
+[data-theme="dark"] select,
+[data-theme="dark"] textarea {
+    color-scheme: dark;
+}
+
+.form-check {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin-bottom: 0.4rem;
+}
+
+.form-check-input {
+    margin: 0 !important;
+}
+
+.form-check-label {
+    color: var(--text-color) !important;
+}

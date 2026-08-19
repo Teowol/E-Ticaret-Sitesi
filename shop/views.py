@@ -305,11 +305,18 @@ def search_results(request):
 def manage_categories(request):
     categories = Category.objects.all()
     if request.method == 'POST':
-        form = CategoryForm(request.POST)
-        if form.is_valid():
-            form.save()
-            messages.success(request, "Kategori eklendi.")
+        if 'delete_category_id' in request.POST:
+            category_id = request.POST.get('delete_category_id')
+            category = get_object_or_404(Category, pk=category_id)
+            category.delete()
+            messages.success(request, "Kategori silindi.")
             return redirect('manage_categories')
+        else:
+            form = CategoryForm(request.POST)
+            if form.is_valid():
+                form.save()
+                messages.success(request, "Kategori eklendi.")
+                return redirect('manage_categories')
     else:
         form = CategoryForm()
     return render(request, 'admin_panel/manage_categories.html', {

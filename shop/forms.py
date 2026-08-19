@@ -9,24 +9,62 @@ class SellerRegistrationForm(UserCreationForm):
         label="Mağaza Adı",
         max_length=150,
         required=True,
+        widget=forms.TextInput(attrs={
+            "class": "form-control",
+            "placeholder": "Mağaza adınızı girin",
+        }),
     )
+
     phone = forms.CharField(
         label="Telefon",
         max_length=20,
         required=False,
+        widget=forms.TextInput(attrs={
+            "class": "form-control",
+            "placeholder": "Telefon numaranızı girin",
+        }),
     )
 
     class Meta:
         model = User
         fields = ["username", "email", "password1", "password2"]
+        widgets = {
+            "username": forms.TextInput(attrs={
+                "class": "form-control",
+                "placeholder": "Kullanıcı adınızı girin",
+                "autocomplete": "username",
+            }),
+            "email": forms.EmailInput(attrs={
+                "class": "form-control",
+                "placeholder": "E-posta adresinizi girin",
+                "autocomplete": "email",
+            }),
+        }
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+
+        self.fields["password1"].widget.attrs.update({
+            "class": "form-control",
+            "placeholder": "Şifrenizi girin",
+            "autocomplete": "new-password",
+        })
+
+        self.fields["password2"].widget.attrs.update({
+            "class": "form-control",
+            "placeholder": "Şifrenizi tekrar girin",
+            "autocomplete": "new-password",
+        })
 
     def save(self, commit=True):
         user = super().save(commit=commit)
+
         if commit:
             user.profile.is_seller = True
             user.profile.store_name = self.cleaned_data.get("store_name")
             user.profile.phone = self.cleaned_data.get("phone")
             user.profile.save()
+
         return user
 
 
@@ -66,13 +104,31 @@ class ProductForm(forms.ModelForm):
 class CategoryForm(forms.ModelForm):
     class Meta:
         model = Category
-        fields = ['name', 'slug']
+        fields = ["name", "slug"]
+        widgets = {
+            "name": forms.TextInput(attrs={
+                "class": "form-control",
+                "placeholder": "Kategori adı",
+            }),
+            "slug": forms.TextInput(attrs={
+                "class": "form-control",
+                "placeholder": "kategori-adi",
+            }),
+        }
 
 
 class BrandForm(forms.ModelForm):
     class Meta:
         model = Brand
-        fields = ['name', 'categories']
+        fields = ["name", "categories"]
         widgets = {
-            'categories': forms.CheckboxSelectMultiple(),
+            "name": forms.TextInput(attrs={
+                "class": "form-control",
+                "placeholder": "Marka adı",
+            }),
+            "categories": forms.CheckboxSelectMultiple(
+                attrs={
+                    "class": "form-check-input",
+                }
+            ),
         }
