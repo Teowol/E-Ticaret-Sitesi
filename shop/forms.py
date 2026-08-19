@@ -2,6 +2,7 @@ from django import forms
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
 from .models import Product, Brand, Category
+from django.utils.translation import gettext_lazy as _
 
 
 class SellerRegistrationForm(UserCreationForm):
@@ -105,14 +106,18 @@ class CategoryForm(forms.ModelForm):
     class Meta:
         model = Category
         fields = ["name", "slug"]
+        labels = {
+            "name": _("Kategori Adı"),
+            "slug": _("URL"),
+        }
         widgets = {
             "name": forms.TextInput(attrs={
                 "class": "form-control",
-                "placeholder": "Kategori adı",
+                "placeholder": _("Kategori adı"),
             }),
             "slug": forms.TextInput(attrs={
                 "class": "form-control",
-                "placeholder": "kategori-adi",
+                "placeholder": _("kategori-adi"),
             }),
         }
 
@@ -121,10 +126,14 @@ class BrandForm(forms.ModelForm):
     class Meta:
         model = Brand
         fields = ["name", "categories"]
+        labels = {
+            "name": _("Marka Adı"),
+            "categories": _("İlgili Kategoriler"),
+        }
         widgets = {
             "name": forms.TextInput(attrs={
                 "class": "form-control",
-                "placeholder": "Marka adı",
+                "placeholder": _("Marka adı"),
             }),
             "categories": forms.CheckboxSelectMultiple(
                 attrs={

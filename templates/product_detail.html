@@ -1,5 +1,8 @@
 {% extends 'base.html' %}
 {% load static %}
+{% load i18n %}
+{% trans "Belirtilmemiş" as unknown_brand %}
+{% trans "Bu ürün için açıklama girilmemiş." as no_description %}
 {% block title %}{{ product.name }} | ComputerSensei{% endblock %}
 
 {% block content %}
@@ -19,31 +22,31 @@
 
         <!-- ÜRÜN BİLGİLERİ -->
         <div class="col-md-7">
-            <nav aria-label="breadcrumb">
+            <nav aria-label="{% trans 'Gezinme yolu' %}">
                 <ol class="breadcrumb small">
-                    <li class="breadcrumb-item"><a href="{% url 'home' %}">Ana Sayfa</a></li>
+                    <li class="breadcrumb-item"><a href="{% url 'home' %}">{% trans "Ana Sayfa" %}</a></li>
                     <li class="breadcrumb-item"><a href="#">{{ product.category.name }}</a></li>
                     <li class="breadcrumb-item active">{{ product.name }}</li>
                 </ol>
             </nav>
 
             <h2 class="fw-bold">{{ product.name }}</h2>
-            <p class="text-secondary">Marka: <strong>{{ product.brand.name|default:"Belirtilmemiş" }}</strong></p>
+            <p class="text-secondary">{% trans "Marka:" %} <strong>{{ product.brand.name|default:unknown_brand }}</strong></p>
 
             <div class="my-3">
                 {% if product.discount_price %}
                     <span class="text-decoration-line-through text-secondary fs-5">{{ product.price }} TL</span>
                     <h3 class="text-primary fw-bold d-inline ms-2">{{ product.discount_price }} TL</h3>
-                    <span class="badge bg-danger ms-2">%{{ product.discount_percent }} indirim</span>
+                    <span class="badge bg-danger ms-2">%{{ product.discount_percent }} {% trans "indirim" %}</span>
                 {% else %}
                     <h3 class="text-primary fw-bold">{{ product.price }} TL</h3>
                 {% endif %}
             </div>
 
             {% if product.stock > 0 %}
-                <p class="text-success"><i class="bi bi-check-circle"></i> Stokta var ({{ product.stock }} adet)</p>
+                <p class="text-success"><i class="bi bi-check-circle"></i> {% blocktrans with stock=product.stock %}Stokta var ({{ stock }} adet){% endblocktrans %}</p>
             {% else %}
-                <p class="text-danger"><i class="bi bi-x-circle"></i> Stokta yok</p>
+                <p class="text-danger"><i class="bi bi-x-circle"></i> {% trans "Stokta yok" %}</p>
             {% endif %}
 
             <!-- SEPETE EKLE FORMU -->
@@ -51,13 +54,13 @@
                 {% csrf_token %}
                 <input type="number" name="quantity" value="1" min="1" max="{{ product.stock }}" class="form-control" style="width: 90px;">
                 <button type="submit" class="btn btn-primary btn-lg px-4" {% if product.stock == 0 %}disabled{% endif %}>
-                    <i class="bi bi-cart-plus"></i> Sepete Ekle
+                    <i class="bi bi-cart-plus"></i> {% trans "Sepete Ekle" %}
                 </button>
             </form>
 
             <hr>
-            <h5>Ürün Açıklaması</h5>
-            <p>{{ product.description|linebreaks|default:"Bu ürün için açıklama girilmemiş." }}</p>
+            <h5>{% trans "Ürün Açıklaması" %}</h5>
+            <p>{{ product.description|linebreaks|default:no_description }}</p>
         </div>
     </div>
 </div>

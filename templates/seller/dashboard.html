@@ -42,7 +42,7 @@
                         <a href="{% url 'seller_product_edit' product.pk %}" class="btn btn-sm btn-outline-dark rounded-pill">
                             <i class="bi bi-pencil"></i>
                         </a>
-                        <form action="{% url 'seller_product_delete' product.pk %}" method="post" class="d-inline" onsubmit="return confirm('Bu ürünü silmek istediğinize emin misiniz?');">
+                        <form action="{% url 'seller_product_delete' product.pk %}" method="post" class="d-inline" onsubmit="return confirm('{% trans 'Bu ürünü silmek istediğinize emin misiniz?' %}');">
                             {% csrf_token %}
                             <button type="submit" class="btn btn-sm btn-outline-danger rounded-pill">
                                 <i class="bi bi-trash"></i>
