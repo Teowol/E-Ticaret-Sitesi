@@ -5,9 +5,10 @@ from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 from django.contrib.auth.decorators import login_required, user_passes_test
 from django.contrib import messages
 from django.utils.translation import gettext_lazy as _
-from .models import Category, Product, Brand
+from .models import Category, Product, Brand, Profile
 from .forms import SellerRegistrationForm, ProductForm, CategoryForm, BrandForm
 from django.db import models
+from django.contrib.auth.models import User
 
 def home(request):
     categories = Category.objects.all()
@@ -300,7 +301,7 @@ def search_results(request):
     })
 
 @login_required
-@user_passes_test(is_seller)
+@user_passes_test(lambda u: is_seller(u) or u.is_superuser, login_url='/giris/')
 def manage_categories(request):
     categories = Category.objects.all()
     if request.method == 'POST':
@@ -311,14 +312,14 @@ def manage_categories(request):
             return redirect('manage_categories')
     else:
         form = CategoryForm()
-    return render(request, 'seller/manage_categories.html', {
+    return render(request, 'admin_panel/manage_categories.html', {
         'categories': categories,
         'form': form,
     })
 
 
 @login_required
-@user_passes_test(is_seller)
+@user_passes_test(lambda u: is_seller(u) or u.is_superuser, login_url='/giris/')
 def edit_category(request, pk):
     category = get_object_or_404(Category, pk=pk)
     if request.method == 'POST':
@@ -329,11 +330,11 @@ def edit_category(request, pk):
             return redirect('manage_categories')
     else:
         form = CategoryForm(instance=category)
-    return render(request, 'seller/edit_category.html', {'form': form, 'category': category})
+    return render(request, 'admin_panel/edit_category.html', {'form': form, 'category': category})
 
 
 @login_required
-@user_passes_test(is_seller)
+@user_passes_test(lambda u: is_seller(u) or u.is_superuser, login_url='/giris/')
 def manage_brands(request):
     brands = Brand.objects.all()
     if request.method == 'POST':
@@ -344,14 +345,14 @@ def manage_brands(request):
             return redirect('manage_brands')
     else:
         form = BrandForm()
-    return render(request, 'seller/manage_brands.html', {
+    return render(request, 'admin_panel/manage_brands.html', {
         'brands': brands,
         'form': form,
     })
 
 
 @login_required
-@user_passes_test(is_seller)
+@user_passes_test(lambda u: is_seller(u) or u.is_superuser, login_url='/giris/')
 def edit_brand(request, pk):
     brand = get_object_or_404(Brand, pk=pk)
     if request.method == 'POST':
@@ -362,4 +363,22 @@ def edit_brand(request, pk):
             return redirect('manage_brands')
     else:
         form = BrandForm(instance=brand)
-    return render(request, 'seller/edit_brand.html', {'form': form, 'brand': brand})
+    return render(request, 'admin_panel/edit_brand.html', {'form': form, 'brand': brand})
+
+def is_admin(user):
+    return user.is_authenticated and user.is_superuser
+
+
+@login_required
+@user_passes_test(is_admin)
+def admin_dashboard(request):
+    context = {
+        'total_users': User.objects.count(),
+        'total_sellers': Profile.objects.filter(is_seller=True).count(),
+        'total_products': Product.objects.count(),
+        'total_categories': Category.objects.count(),
+        'total_brands': Brand.objects.count(),
+        'recent_products': Product.objects.order_by('-created_at')[:10],
+        'sellers': Profile.objects.filter(is_seller=True).select_related('user'),
+    }
+    return render(request, 'admin_panel/dashboard.html', context)

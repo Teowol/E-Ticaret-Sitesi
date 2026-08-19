@@ -1,0 +1,97 @@
+    {% extends 'base.html' %}
+{% load i18n %}
+
+{% block title %}Yönetim Paneli | ComputerSensei{% endblock %}
+
+{% block content %}
+<div class="container my-5">
+    <h3 class="fw-bold mb-4"><i class="bi bi-speedometer2 text-custom"></i> {% trans "Yönetim Paneli" %}</h3>
+
+    <div class="row g-4 mb-5">
+        <div class="col-md-3 col-6">
+            <div class="card shadow-sm border-0 rounded-4 p-3 text-center">
+                <h2 class="fw-bold text-custom">{{ total_users }}</h2>
+                <span class="text-muted">{% trans "Toplam Kullanıcı" %}</span>
+            </div>
+        </div>
+        <div class="col-md-3 col-6">
+            <div class="card shadow-sm border-0 rounded-4 p-3 text-center">
+                <h2 class="fw-bold text-custom">{{ total_sellers }}</h2>
+                <span class="text-muted">{% trans "Toplam Satıcı" %}</span>
+            </div>
+        </div>
+        <div class="col-md-3 col-6">
+            <div class="card shadow-sm border-0 rounded-4 p-3 text-center">
+                <h2 class="fw-bold text-custom">{{ total_products }}</h2>
+                <span class="text-muted">{% trans "Toplam Ürün" %}</span>
+            </div>
+        </div>
+        <div class="col-md-3 col-6">
+            <div class="card shadow-sm border-0 rounded-4 p-3 text-center">
+                <h2 class="fw-bold text-custom">{{ total_categories }} / {{ total_brands }}</h2>
+                <span class="text-muted">{% trans "Kategori / Marka" %}</span>
+            </div>
+        </div>
+    </div>
+
+    <div class="d-flex flex-wrap gap-2 mb-5">
+        <a href="{% url 'manage_categories' %}" class="btn btn-outline-dark rounded-pill px-4">
+            <i class="bi bi-tags"></i> {% trans "Kategorileri Yönet" %}
+        </a>
+        <a href="{% url 'manage_brands' %}" class="btn btn-outline-dark rounded-pill px-4">
+            <i class="bi bi-award"></i> {% trans "Markaları Yönet" %}
+        </a>
+        <a href="/admin/" target="_blank" class="btn btn-outline-warning rounded-pill px-4">
+            <i class="bi bi-shield-lock"></i> {% trans "Django Admin (Gelişmiş)" %}
+        </a>
+    </div>
+
+    <div class="row g-4">
+        <div class="col-md-7">
+            <div class="card shadow-sm border-0 rounded-4 p-4">
+                <h5 class="fw-bold mb-3">{% trans "Son Eklenen Ürünler" %}</h5>
+                <table class="table table-sm align-middle">
+                    <thead>
+                        <tr>
+                            <th>{% trans "Ürün" %}</th>
+                            <th>{% trans "Satıcı" %}</th>
+                            <th>{% trans "Fiyat" %}</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for p in recent_products %}
+                        <tr>
+                            <td>{{ p.name }}</td>
+                            <td>{{ p.seller.username|default:"-" }}</td>
+                            <td>{{ p.current_price }} TL</td>
+                        </tr>
+                        {% empty %}
+                        <tr><td colspan="3" class="text-muted">{% trans "Henüz ürün yok." %}</td></tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <div class="col-md-5">
+            <div class="card shadow-sm border-0 rounded-4 p-4">
+                <h5 class="fw-bold mb-3">{% trans "Satıcılar" %}</h5>
+                <ul class="list-group list-group-flush">
+                    {% for profile in sellers %}
+                    <li class="list-group-item d-flex justify-content-between align-items-center px-0">
+                        {{ profile.store_name|default:profile.user.username }}
+                        {% if profile.is_approved %}
+                            <span class="badge bg-success">{% trans "Onaylı" %}</span>
+                        {% else %}
+                            <span class="badge bg-secondary">{% trans "Onaysız" %}</span>
+                        {% endif %}
+                    </li>
+                    {% empty %}
+                    <li class="list-group-item px-0 text-muted">{% trans "Satıcı yok." %}</li>
+                    {% endfor %}
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

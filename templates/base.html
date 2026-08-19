@@ -94,9 +94,9 @@
                                 <li><hr class="dropdown-divider"></li>
                                 {% endif %}
 
-                                {% if user.is_staff %}
+                                {% if user.is_superuser %}
                                 <li>
-                                    <a class="dropdown-item" href="/admin/" target="_blank">
+                                    <a class="dropdown-item" href="{% url 'admin_dashboard' %}">
                                         <i class="bi bi-shield-lock me-2 text-warning"></i> {% trans "Yönetim Paneli" %}
                                     </a>
                                 </li>

@@ -1,0 +1,51 @@
+{% extends 'base.html' %}
+{% load i18n %}
+
+{% block title %}Kategori Yönetimi | ComputerSensei{% endblock %}
+
+{% block content %}
+<div class="container my-5">
+    <h3 class="fw-bold mb-4"><i class="bi bi-tags text-custom"></i> {% trans "Kategori Yönetimi" %}</h3>
+
+    <div class="row g-4">
+        <div class="col-md-5">
+            <div class="card shadow-sm border-0 rounded-4 p-4">
+                <h5 class="fw-bold mb-3">{% trans "Yeni Kategori Ekle" %}</h5>
+                {% if form.errors %}
+                <div class="alert alert-danger py-2 small">{{ form.errors }}</div>
+                {% endif %}
+                <form method="post">
+                    {% csrf_token %}
+                    {% for field in form %}
+                    <div class="mb-3">
+                        <label class="form-label fw-semibold">{{ field.label }}</label>
+                        {{ field }}
+                    </div>
+                    {% endfor %}
+                    <button type="submit" class="btn btn-custom rounded-pill px-4 fw-semibold w-100">
+                        {% trans "Ekle" %}
+                    </button>
+                </form>
+            </div>
+        </div>
+
+        <div class="col-md-7">
+            <div class="card shadow-sm border-0 rounded-4 p-4">
+                <h5 class="fw-bold mb-3">{% trans "Mevcut Kategoriler" %}</h5>
+                <ul class="list-group list-group-flush">
+                    {% for category in categories %}
+                    <li class="list-group-item d-flex justify-content-between align-items-center px-0">
+                        {{ category.name }}
+                        <a href="{% url 'edit_category' category.pk %}" class="btn btn-sm btn-outline-dark rounded-pill px-3">
+                            <i class="bi bi-pencil"></i> {% trans "Düzenle" %}
+                        </a>
+                    </li>
+                    {% empty %}
+                    <li class="list-group-item px-0 text-muted">{% trans "Henüz kategori yok." %}</li>
+                    {% endfor %}
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
