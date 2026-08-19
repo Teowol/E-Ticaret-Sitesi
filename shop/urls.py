@@ -22,4 +22,9 @@ urlpatterns = [
     path('satici/urun/<int:pk>/sil/', views.seller_product_delete, name='seller_product_delete'),
 
     path('arama/', views.search_results, name='search_results'),
+
+    path('satici/kategoriler/', views.manage_categories, name='manage_categories'),
+    path('satici/kategoriler/<int:pk>/duzenle/', views.edit_category, name='edit_category'),
+    path('satici/markalar/', views.manage_brands, name='manage_brands'),
+    path('satici/markalar/<int:pk>/duzenle/', views.edit_brand, name='edit_brand'),
 ]

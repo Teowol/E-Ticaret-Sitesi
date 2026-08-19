@@ -20,6 +20,12 @@ class Category(models.Model):
 
 class Brand(models.Model):
     name = models.CharField("Marka Adı", max_length=100)
+    categories = models.ManyToManyField(
+        Category,
+        related_name="brands",
+        verbose_name="İlgili Kategoriler",
+        blank=True,
+    )
 
     class Meta:
         verbose_name = "Marka"

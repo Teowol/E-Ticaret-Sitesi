@@ -2,11 +2,11 @@ from django.shortcuts import render, get_object_or_404, redirect
 from django.http import HttpResponseRedirect
 from django.contrib.auth import login, authenticate, logout
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
-from django.contrib.auth.decorators import login_required
+from django.contrib.auth.decorators import login_required, user_passes_test
 from django.contrib import messages
 from django.utils.translation import gettext_lazy as _
-from .models import Category, Product
-from .forms import SellerRegistrationForm, ProductForm
+from .models import Category, Product, Brand
+from .forms import SellerRegistrationForm, ProductForm, CategoryForm, BrandForm
 from django.db import models
 
 def home(request):
@@ -219,6 +219,19 @@ def seller_product_add(request):
         form = ProductForm(request.POST, request.FILES)
         if form.is_valid():
             product = form.save(commit=False)
+
+            new_brand_name = form.cleaned_data.get('new_brand')
+            category = form.cleaned_data.get('category')
+
+            if new_brand_name:
+                brand, created = Brand.objects.get_or_create(
+                    name__iexact=new_brand_name,
+                    defaults={'name': new_brand_name}
+                )
+                if category:
+                    brand.categories.add(category)
+                product.brand = brand
+
             product.seller = request.user
             product.save()
             messages.success(request, 'Ürün başarıyla eklendi.')
@@ -234,7 +247,21 @@ def seller_product_edit(request, pk):
     if request.method == 'POST':
         form = ProductForm(request.POST, request.FILES, instance=product)
         if form.is_valid():
-            form.save()
+            product = form.save(commit=False)
+
+            new_brand_name = form.cleaned_data.get('new_brand')
+            category = form.cleaned_data.get('category')
+
+            if new_brand_name:
+                brand, created = Brand.objects.get_or_create(
+                    name__iexact=new_brand_name,
+                    defaults={'name': new_brand_name}
+                )
+                if category:
+                    brand.categories.add(category)
+                product.brand = brand
+
+            product.save()
             messages.success(request, 'Ürün güncellendi.')
             return redirect('seller_dashboard')
     else:
@@ -271,3 +298,68 @@ def search_results(request):
         'featured_products': featured_products,
         'query': query,
     })
+
+@login_required
+@user_passes_test(is_seller)
+def manage_categories(request):
+    categories = Category.objects.all()
+    if request.method == 'POST':
+        form = CategoryForm(request.POST)
+        if form.is_valid():
+            form.save()
+            messages.success(request, "Kategori eklendi.")
+            return redirect('manage_categories')
+    else:
+        form = CategoryForm()
+    return render(request, 'seller/manage_categories.html', {
+        'categories': categories,
+        'form': form,
+    })
+
+
+@login_required
+@user_passes_test(is_seller)
+def edit_category(request, pk):
+    category = get_object_or_404(Category, pk=pk)
+    if request.method == 'POST':
+        form = CategoryForm(request.POST, instance=category)
+        if form.is_valid():
+            form.save()
+            messages.success(request, "Kategori güncellendi.")
+            return redirect('manage_categories')
+    else:
+        form = CategoryForm(instance=category)
+    return render(request, 'seller/edit_category.html', {'form': form, 'category': category})
+
+
+@login_required
+@user_passes_test(is_seller)
+def manage_brands(request):
+    brands = Brand.objects.all()
+    if request.method == 'POST':
+        form = BrandForm(request.POST)
+        if form.is_valid():
+            form.save()
+            messages.success(request, "Marka eklendi.")
+            return redirect('manage_brands')
+    else:
+        form = BrandForm()
+    return render(request, 'seller/manage_brands.html', {
+        'brands': brands,
+        'form': form,
+    })
+
+
+@login_required
+@user_passes_test(is_seller)
+def edit_brand(request, pk):
+    brand = get_object_or_404(Brand, pk=pk)
+    if request.method == 'POST':
+        form = BrandForm(request.POST, instance=brand)
+        if form.is_valid():
+            form.save()
+            messages.success(request, "Marka güncellendi.")
+            return redirect('manage_brands')
+    else:
+        form = BrandForm(instance=brand)
+    return render(request, 'seller/edit_brand.html', {'form': form, 'brand': brand})

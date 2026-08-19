@@ -1,7 +1,7 @@
 from django import forms
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
-from .models import Product
+from .models import Product, Brand, Category
 
 
 class SellerRegistrationForm(UserCreationForm):
@@ -31,6 +31,13 @@ class SellerRegistrationForm(UserCreationForm):
 
 
 class ProductForm(forms.ModelForm):
+    new_brand = forms.CharField(
+        label="Yeni Marka (listede yoksa buraya yazın)",
+        max_length=100,
+        required=False,
+        help_text="Marka listede yoksa bu alana yeni marka adını yazın, otomatik olarak eklenir."
+    )
+
     class Meta:
         model = Product
         fields = [
@@ -40,4 +47,32 @@ class ProductForm(forms.ModelForm):
         ]
         widgets = {
             "description": forms.Textarea(attrs={"rows": 4}),
+        }
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields["brand"].required = False
+
+    def clean(self):
+        cleaned_data = super().clean()
+        brand = cleaned_data.get("brand")
+        new_brand = cleaned_data.get("new_brand")
+
+        if not brand and not new_brand:
+            raise forms.ValidationError("Lütfen bir marka seçin veya yeni marka adı girin.")
+
+        return cleaned_data
+
+class CategoryForm(forms.ModelForm):
+    class Meta:
+        model = Category
+        fields = ['name', 'slug']
+
+
+class BrandForm(forms.ModelForm):
+    class Meta:
+        model = Brand
+        fields = ['name', 'categories']
+        widgets = {
+            'categories': forms.CheckboxSelectMultiple(),
         }

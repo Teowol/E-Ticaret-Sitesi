@@ -285,3 +285,12 @@ form label,
 .offcanvas-title {
     color: var(--text-color) !important;
 }
+
+form small,
+form ul,
+form ul li,
+form p,
+form span:not(.input-group-text) {
+    color: var(--text-color) !important;
+    opacity: 1 !important;
+}

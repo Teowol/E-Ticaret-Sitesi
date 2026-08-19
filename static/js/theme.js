@@ -4,40 +4,31 @@
 })();
 
 document.addEventListener("DOMContentLoaded", function () {
-    const lightButton = document.getElementById("themeLightBtn");
-    const darkButton = document.getElementById("themeDarkBtn");
-    const lightCheck = document.querySelector(".theme-check-light");
-    const darkCheck = document.querySelector(".theme-check-dark");
+    const toggleBtn = document.getElementById("themeToggleBtn");
+    const toggleText = document.getElementById("themeToggleText");
 
-    function updateThemeButtons() {
-        const currentTheme = document.documentElement.getAttribute("data-theme");
+    function renderButton(theme) {
+        if (!toggleText) return;
 
-        if (currentTheme === "dark") {
-            lightButton?.classList.remove("active");
-            darkButton?.classList.add("active");
-            lightCheck?.classList.add("d-none");
-            darkCheck?.classList.remove("d-none");
+        if (theme === "dark") {
+            toggleText.innerHTML =
+                '<i id="themeToggleIcon" class="bi bi-moon-stars-fill text-info me-2"></i>Karanlık Tema';
         } else {
-            lightButton?.classList.add("active");
-            darkButton?.classList.remove("active");
-            lightCheck?.classList.remove("d-none");
-            darkCheck?.classList.add("d-none");
+            toggleText.innerHTML =
+                '<i id="themeToggleIcon" class="bi bi-sun-fill text-warning me-2"></i>Açık Tema';
         }
     }
 
-    function setTheme(theme) {
-        document.documentElement.setAttribute("data-theme", theme);
-        localStorage.setItem("computersensei-theme", theme);
-        updateThemeButtons();
+    const currentTheme = document.documentElement.getAttribute("data-theme") || "light";
+    renderButton(currentTheme);
+
+    if (toggleBtn) {
+        toggleBtn.addEventListener("click", function () {
+            const current = document.documentElement.getAttribute("data-theme") || "light";
+            const next = current === "dark" ? "light" : "dark";
+            document.documentElement.setAttribute("data-theme", next);
+            localStorage.setItem("computersensei-theme", next);
+            renderButton(next);
+        });
     }
-
-    lightButton?.addEventListener("click", function () {
-        setTheme("light");
-    });
-
-    darkButton?.addEventListener("click", function () {
-        setTheme("dark");
-    });
-
-    updateThemeButtons();
 });
