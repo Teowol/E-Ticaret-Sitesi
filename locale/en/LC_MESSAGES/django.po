@@ -333,23 +333,23 @@ msgstr "All"
 
 #: templates/base.html:184
 msgid "Görünüm ve Dil Ayarları"
-msgstr ""
+msgstr "Visual and Language Settings"
 
 #: templates/base.html:191 templates/base.html:254
 msgid "Kapat"
-msgstr ""
+msgstr "Exit"
 
 #: templates/base.html:200
 msgid "Tema Tercihi"
-msgstr ""
+msgstr "Theme Preferance"
 
 #: templates/base.html:209
 msgid "Açık Tema"
-msgstr ""
+msgstr "Light Theme"
 
 #: templates/base.html:221
 msgid "Dil Seçimi"
-msgstr ""
+msgstr "Language Option"
 
 #: templates/base.html:236
 msgid "Türkçe"
@@ -494,7 +494,7 @@ msgstr "Out of Stock"
 
 #: templates/home.html:89
 msgid "Henüz öne çıkan ürün eklenmemiş."
-msgstr ""
+msgstr "Haven't yet added a featured product"
 
 #: templates/home.html:90
 msgid ""
@@ -587,11 +587,11 @@ msgstr "Processors (CPU)"
 
 #: templates/seller/dashboard.html:36
 msgid "Evet"
-msgstr ""
+msgstr "Yes"
 
 #: templates/seller/dashboard.html:38
 msgid "Hayır"
-msgstr ""
+msgstr "No"
 
 #: templates/seller/dashboard.html:45
 #, fuzzy

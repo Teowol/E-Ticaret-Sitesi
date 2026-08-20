@@ -6,25 +6,77 @@
 {% block content %}
 <div class="container my-5">
     <div class="row justify-content-center">
-        <div class="col-md-6">
-            <div class="card shadow-lg border-0 rounded-4 p-4">
-                <h3 class="fw-bold mb-4"><i class="bi bi-award text-custom"></i> {% trans "Marka Düzenle" %}</h3>
+        <div class="col-lg-7 col-md-9">
+            <div class="card shadow-sm border-0 rounded-4 p-4 p-md-5">
+                
+                <div class="d-flex align-items-center mb-4">
+                    <span class="fs-3 me-2 text-custom">
+                        <i class="bi bi-award-fill"></i>
+                    </span>
+                    <h3 class="fw-bold mb-0">{% trans "Marka Düzenle" %}</h3>
+                </div>
+
                 {% if form.errors %}
-                <div class="alert alert-danger py-2 small">{{ form.errors }}</div>
+                <div class="alert alert-danger py-2 small mb-4">
+                    {{ form.errors }}
+                </div>
                 {% endif %}
+
                 <form method="post">
                     {% csrf_token %}
-                    {% for field in form %}
-                    <div class="mb-3">
-                        <label class="form-label fw-semibold">{{ field.label }}</label>
-                        {{ field }}
+
+                    <!-- Marka Adı -->
+                    <div class="mb-4">
+                        <label class="form-label fw-semibold" for="{{ form.name.id_for_label }}">
+                            {% trans "Marka Adı" %}
+                        </label>
+                        {{ form.name }}
                     </div>
+
+                    <!-- İlgili Kategoriler (Kutulu ve Çok Sütunlu Grid) -->
+                    {% if form.categories %}
+                    <div class="mb-4">
+                        <label class="form-label fw-semibold d-block mb-2">
+                            {% trans "İlgili Kategoriler" %}
+                        </label>
+                        <div class="p-3 border rounded-3 bg-light-subtle" style="max-height: 260px; overflow-y: auto;">
+                            <div class="row g-2">
+                                {% for choice in form.categories %}
+                                <div class="col-sm-6">
+                                    <div class="form-check">
+                                        {{ choice.tag }}
+                                        <label class="form-check-label small fw-medium" for="{{ choice.id_for_label }}">
+                                            {{ choice.choice_label }}
+                                        </label>
+                                    </div>
+                                </div>
+                                {% endfor %}
+                            </div>
+                        </div>
+                    </div>
+                    {% endif %}
+
+                    <!-- Diğer olası alanlar -->
+                    {% for field in form %}
+                        {% if field.name != 'name' and field.name != 'categories' %}
+                        <div class="mb-3">
+                            <label class="form-label fw-semibold">{{ field.label }}</label>
+                            {{ field }}
+                        </div>
+                        {% endif %}
                     {% endfor %}
-                    <div class="d-flex gap-2 mt-4">
-                        <button type="submit" class="btn btn-custom rounded-pill px-4 fw-semibold">{% trans "Kaydet" %}</button>
-                        <a href="{% url 'manage_brands' %}" class="btn btn-outline-dark rounded-pill px-4">{% trans "Vazgeç" %}</a>
+
+                    <!-- Butonlar (En altta ve düzgün hizalı) -->
+                    <div class="d-flex gap-3 pt-3 mt-4 border-top">
+                        <button type="submit" class="btn btn-custom rounded-pill px-5 fw-semibold">
+                            {% trans "Kaydet" %}
+                        </button>
+                        <a href="{% url 'manage_brands' %}" class="btn btn-outline-secondary rounded-pill px-4 fw-semibold">
+                            {% trans "Vazgeç" %}
+                        </a>
                     </div>
                 </form>
+
             </div>
         </div>
     </div>
