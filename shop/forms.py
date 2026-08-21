@@ -71,10 +71,15 @@ class SellerRegistrationForm(UserCreationForm):
 
 class ProductForm(forms.ModelForm):
     new_brand = forms.CharField(
-        label="Yeni Marka (listede yoksa buraya yazın)",
+        label="Yeni marka ekle",
         max_length=100,
         required=False,
-        help_text="Marka listede yoksa bu alana yeni marka adını yazın, otomatik olarak eklenir."
+        widget=forms.TextInput(
+            attrs={
+                "placeholder": "Listede yoksa yeni marka adı yazın",
+                "class": "form-control",
+            }
+        ),
     )
 
     class Meta:
@@ -90,18 +95,46 @@ class ProductForm(forms.ModelForm):
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
+
+        # Yeni marka girilebileceği için mevcut marka alanı zorunlu olmamalı.
         self.fields["brand"].required = False
+
+        self.fields["brand"].widget.attrs.update({
+            "class": "form-select",
+        })
+
+        self.fields["category"].widget.attrs.update({
+            "class": "form-select",
+        })
 
     def clean(self):
         cleaned_data = super().clean()
+
+        category = cleaned_data.get("category")
         brand = cleaned_data.get("brand")
         new_brand = cleaned_data.get("new_brand")
 
+        # Ne mevcut marka ne de yeni marka seçilmişse hata ver.
         if not brand and not new_brand:
-            raise forms.ValidationError("Lütfen bir marka seçin veya yeni marka adı girin.")
+            self.add_error(
+                "brand",
+                "Lütfen mevcut bir marka seçin veya yeni marka adı yazın."
+            )
+
+        # Mevcut marka seçildiyse kategoriyle eşleşmesini kontrol et.
+        if category and brand and not new_brand:
+            is_brand_in_category = brand.categories.filter(
+                pk=category.pk
+            ).exists()
+
+            if not is_brand_in_category:
+                self.add_error(
+                    "brand",
+                    "Seçtiğiniz marka, seçilen kategoriye bağlı değil."
+                )
 
         return cleaned_data
-
+    
 class CategoryForm(forms.ModelForm):
     class Meta:
         model = Category

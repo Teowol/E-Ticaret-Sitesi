@@ -9,6 +9,10 @@ from .models import Category, Product, Brand, Profile
 from .forms import SellerRegistrationForm, ProductForm, CategoryForm, BrandForm
 from django.db import models
 from django.contrib.auth.models import User
+from django.http import JsonResponse
+from .models import Category, Product, Brand
+from django.http import JsonResponse
+from django.views.decorators.http import require_POST
 
 def home(request):
     categories = Category.objects.all()
@@ -38,108 +42,131 @@ def product_detail(request, slug):
     })
 
 
-def cart_detail(request):
+def cart_summary(request):
     cart = request.session.get('cart', {})
     cart_items = []
     total_price = 0
+    total_count = 0
 
     for product_id, quantity in list(cart.items()):
-        product = Product.objects.filter(
-            pk=product_id,
-            is_active=True,
-        ).first()
-
-        if product is None:
-            cart.pop(product_id, None)
-            request.session['cart'] = cart
-            request.session.modified = True
+        product = Product.objects.filter(pk=product_id, is_active=True).first()
+        if not product:
             continue
 
         item_total = product.current_price * quantity
         total_price += item_total
+        total_count += quantity
 
         cart_items.append({
             'product': product,
+            'product_id': product.id,
+            'price': product.current_price,
             'quantity': quantity,
-            'total': item_total,
+            'item_total': item_total,
         })
 
-    return render(request, 'cart_detail.html', {
+    return {
         'cart_items': cart_items,
         'total_price': total_price,
+        'total_count': total_count,
+    }
+
+
+def cart_detail(request):
+    summary = cart_summary(request)
+    return render(request, 'cart_detail.html', {
+        'cart_items': summary['cart_items'],
+        'total_price': summary['total_price'],
         'categories': Category.objects.all(),
     })
 
+
+@require_POST
 def cart_add(request, product_id):
-    if request.method == 'POST':
-        product = get_object_or_404(Product, pk=product_id, is_active=True)
-        cart = request.session.get('cart', {})
+    product = get_object_or_404(Product, pk=product_id, is_active=True)
+    cart = request.session.get('cart', {})
 
-        try:
-            quantity = int(request.POST.get('quantity', 1))
-        except (TypeError, ValueError):
-            quantity = 1
+    try:
+        quantity = int(request.POST.get('quantity', 1))
+    except (TypeError, ValueError):
+        quantity = 1
 
-        quantity = max(quantity, 1)
-        current_quantity = cart.get(str(product.id), 0)
-        new_quantity = current_quantity + quantity
+    if quantity < 1:
+        quantity = 1
 
-        if product.stock <= 0:
-            messages.warning(request, f"{product.name} stokta yok.")
-            return redirect(request.META.get('HTTP_REFERER', 'home'))
+    current_qty = cart.get(str(product.id), 0)
+    new_quantity = min(current_qty + quantity, product.stock or (current_qty + quantity))
 
-        if new_quantity > product.stock:
-            new_quantity = product.stock
-            messages.warning(
-                request,
-                f"{product.name} için stoktaki maksimum adede ulaşıldı."
-            )
-        else:
-            messages.success(request, f"{product.name} sepete eklendi.")
+    cart[str(product.id)] = new_quantity
+    request.session['cart'] = cart
+    request.session.modified = True
 
-        cart[str(product.id)] = new_quantity
-        request.session['cart'] = cart
-        request.session.modified = True
+    if request.headers.get('X-Requested-With') == 'XMLHttpRequest':
+        summary = cart_summary(request)
+        return JsonResponse({
+            'success': True,
+            'message': 'Ürün sepete eklendi.',
+            'cart_count': summary['total_count'],
+            'cart_total': float(summary['total_price']),
+        })
 
     return redirect(request.META.get('HTTP_REFERER', 'home'))
 
+
+@require_POST
 def cart_update(request, product_id):
-    if request.method == 'POST':
-        product = get_object_or_404(Product, pk=product_id, is_active=True)
-        cart = request.session.get('cart', {})
+    product = get_object_or_404(Product, pk=product_id, is_active=True)
+    cart = request.session.get('cart', {})
 
-        try:
-            quantity = int(request.POST.get('quantity', 1))
-        except (TypeError, ValueError):
-            quantity = 1
+    try:
+        quantity = int(request.POST.get('quantity', 1))
+    except (TypeError, ValueError):
+        quantity = 1
 
-        if quantity <= 0:
-            cart.pop(str(product.id), None)
-            messages.info(request, f"{product.name} sepetten kaldırıldı.")
-        elif quantity > product.stock:
-            cart[str(product.id)] = product.stock
-            messages.warning(
-                request,
-                f"{product.name} için stoktaki maksimum adet uygulandı."
-            )
-        else:
-            cart[str(product.id)] = quantity
-            messages.success(request, "Sepet güncellendi.")
+    if quantity < 1:
+        cart.pop(str(product.id), None)
+    else:
+        cart[str(product.id)] = min(quantity, product.stock or quantity)
 
-        request.session['cart'] = cart
-        request.session.modified = True
+    request.session['cart'] = cart
+    request.session.modified = True
+
+    if request.headers.get('X-Requested-With') == 'XMLHttpRequest':
+        summary = cart_summary(request)
+        item_total = product.current_price * cart.get(str(product.id), 0)
+
+        return JsonResponse({
+            'success': True,
+            'message': 'Sepet güncellendi.',
+            'product_id': product.id,
+            'quantity': cart.get(str(product.id), 0),
+            'item_total': float(item_total),
+            'cart_count': summary['total_count'],
+            'cart_total': float(summary['total_price']),
+        })
 
     return redirect('cart_detail')
 
-def cart_remove(request, product_id):
-    if request.method == 'POST':
-        cart = request.session.get('cart', {})
 
-        if str(product_id) in cart:
-            cart.pop(str(product_id))
-            request.session['cart'] = cart
-            request.session.modified = True
-            messages.info(request, "Ürün sepetten kaldırıldı.")
+@require_POST
+def cart_remove(request, product_id):
+    cart = request.session.get('cart', {})
+
+    if str(product_id) in cart:
+        cart.pop(str(product_id))
+        request.session['cart'] = cart
+        request.session.modified = True
+
+    if request.headers.get('X-Requested-With') == 'XMLHttpRequest':
+        summary = cart_summary(request)
+        return JsonResponse({
+            'success': True,
+            'message': 'Ürün sepetten kaldırıldı.',
+            'product_id': product_id,
+            'quantity': 0,
+            'cart_count': summary['total_count'],
+            'cart_total': float(summary['total_price']),
+        })
 
     return redirect('cart_detail')
 
@@ -389,3 +416,24 @@ def admin_dashboard(request):
         'sellers': Profile.objects.filter(is_seller=True).select_related('user'),
     }
     return render(request, 'admin_panel/dashboard.html', context)
+
+@login_required
+def brands_by_category(request):
+    category_id = request.GET.get("category_id")
+
+    if not category_id:
+        return JsonResponse({"brands": []})
+
+    brands = Brand.objects.filter(
+        categories__id=category_id
+    ).order_by("name").distinct()
+
+    brand_data = [
+        {
+            "id": brand.id,
+            "name": brand.name,
+        }
+        for brand in brands
+    ]
+
+    return JsonResponse({"brands": brand_data})

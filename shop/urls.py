@@ -29,4 +29,6 @@ urlpatterns = [
     path('satici/markalar/<int:pk>/duzenle/', views.edit_brand, name='edit_brand'),
 
     path('yonetim-panelim/', views.admin_dashboard, name='admin_dashboard'),
+
+    path("api/kategori-markalari/",views.brands_by_category,name="brands_by_category"),
 ]

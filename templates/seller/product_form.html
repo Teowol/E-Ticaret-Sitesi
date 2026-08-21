@@ -39,4 +39,70 @@
         </div>
     </div>
 </div>
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+    const categorySelect = document.getElementById("id_category");
+    const brandSelect = document.getElementById("id_brand");
+
+    if (!categorySelect || !brandSelect) {
+        return;
+    }
+
+    const initiallySelectedBrand = brandSelect.value;
+
+    function loadBrands(categoryId, selectedBrandId = "") {
+        brandSelect.innerHTML = '<option value="">Önce kategori seçin</option>';
+        brandSelect.disabled = true;
+
+        if (!categoryId) {
+            return;
+        }
+
+        brandSelect.innerHTML = '<option value="">Markalar yükleniyor...</option>';
+
+        brandSelect.innerHTML = '<option value="">Markalar yükleniyor...</option>';
+
+        fetch("{% url 'brands_by_category' %}?category_id=" + categoryId)
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error("Markalar alınamadı.");
+                }
+
+                return response.json();
+            })
+            .then(data => {
+                brandSelect.innerHTML = '<option value="">Marka seçin</option>';
+
+                data.brands.forEach(brand => {
+                    const option = document.createElement("option");
+                    option.value = brand.id;
+                    option.textContent = brand.name;
+
+                    if (String(brand.id) === String(selectedBrandId)) {
+                        option.selected = true;
+                    }
+
+                    brandSelect.appendChild(option);
+                });
+
+                brandSelect.disabled = false;
+            })
+            .catch(error => {
+                console.error(error);
+                brandSelect.innerHTML = '<option value="">Markalar yüklenemedi</option>';
+            });
+    }
+
+    categorySelect.addEventListener("change", function () {
+        loadBrands(this.value);
+    });
+
+    if (categorySelect.value) {
+        loadBrands(categorySelect.value, initiallySelectedBrand);
+    } else {
+        brandSelect.innerHTML = '<option value="">Önce kategori seçin</option>';
+        brandSelect.disabled = true;
+    }
+});
+</script>
 {% endblock %}

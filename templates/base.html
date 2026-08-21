@@ -132,7 +132,7 @@
                     <li class="nav-item">
                         <a class="btn btn-outline-light position-relative rounded-pill px-3" href="{% url 'cart_detail' %}">
                             <i class="bi bi-cart3"></i> {% trans "Sepet" %}
-                            <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
+                            <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger cart-badge">
                                 {{ cart_total_count|default:0 }}
                             </span>
                         </a>
@@ -302,5 +302,6 @@
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
     <script src="{% static 'js/theme.js' %}?v=2"></script>
+{% block extra_js %}{% endblock %}
 </body>
 </html>

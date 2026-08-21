@@ -1,74 +1,96 @@
 {% extends 'base.html' %}
+{% load static %}
 {% load i18n %}
 
 {% block title %}{% trans "Alışveriş Sepetim" %} | ComputerSensei{% endblock %}
 
 {% block content %}
 <div class="container my-5">
-    <h2 class="fw-bold mb-4">
-        <i class="bi bi-cart3 text-custom me-2"></i> {% trans "Alışveriş Sepetim" %}
-    </h2>
+    <h2 class="fw-bold mb-4"><i class="bi bi-cart3 text-custom"></i> {% trans "Alışveriş Sepetim" %}</h2>
 
     {% if cart_items %}
     <div class="row g-4">
-        <!-- SEPETTEKİ ÜRÜNLER LİSTESİ -->
         <div class="col-lg-8">
-            <div class="card border-0 shadow-sm rounded-4 p-3">
+            <div class="card shadow-sm border-0 rounded-4">
                 <div class="table-responsive">
                     <table class="table align-middle mb-0">
                         <thead>
-                            <tr class="text-muted small border-bottom">
+                            <tr>
                                 <th>{% trans "Ürün" %}</th>
-                                <th>{% trans "Fiyat" %}</th>
-                                <th class="text-center">{% trans "Adet" %}</th>
-                                <th>{% trans "Toplam" %}</th>
+                                <th class="text-center">{% trans "Fiyat" %}</th>
+                                <th class="text-center" style="width: 180px;">{% trans "Adet" %}</th>
+                                <th class="text-end">{% trans "Toplam" %}</th>
                                 <th></th>
                             </tr>
                         </thead>
                         <tbody>
                             {% for item in cart_items %}
-                            <tr>
+                            <tr id="cart-item-{{ item.product_id }}">
+                                <td>
+                                    <div class="d-flex align-items-center gap-3">
+                                        {% if item.product.image %}
+                                        <img src="{{ item.product.image.url }}" alt="{{ item.product.name }}" class="rounded-3" style="width: 80px; height: 80px; object-fit: cover;">
+                                        {% else %}
+                                        <div class="bg-light rounded-3 d-flex align-items-center justify-content-center" style="width: 80px; height: 80px;">
+                                            <i class="bi bi-image fs-3 text-muted"></i>
+                                        </div>
+                                        {% endif %}
+                                        <div>
+                                            <h6 class="fw-bold mb-1">{{ item.product.name }}</h6>
+                                            <small class="text-muted">{{ item.product.brand.name|default:item.product.category.name }}</small>
+                                        </div>
+                                    </div>
+                                </td>
                                 <td class="text-center">
-                                    <form action="{% url 'cart_update' item.product.id %}" method="post" class="d-inline-flex align-items-center gap-2">
-                                        {% csrf_token %}
-
+                                    <span class="fw-semibold">{{ item.price }} TL</span>
+                                </td>
+                                <td class="text-center">
+                                    <div class="d-flex align-items-center justify-content-center gap-2">
                                         <button
-                                            type="submit"
-                                            name="quantity"
-                                            value="{{ item.quantity|add:'-1' }}"
-                                            class="btn btn-sm btn-outline-secondary rounded-circle"
-                                            aria-label="{% trans 'Adedi azalt' %}">
+                                            type="button"
+                                            class="btn btn-sm btn-outline-secondary rounded-circle cart-update-btn"
+                                            data-product-id="{{ item.product_id }}"
+                                            data-action="decrease"
+                                            style="width: 36px; height: 36px;"
+                                        >
                                             <i class="bi bi-dash"></i>
                                         </button>
 
-                                        <span class="fw-bold px-2">{{ item.quantity }}</span>
+                                        <input
+                                            type="number"
+                                            class="form-control form-control-sm text-center cart-qty-input"
+                                            data-product-id="{{ item.product_id }}"
+                                            value="{{ item.quantity }}"
+                                            min="1"
+                                            max="{{ item.product.stock }}"
+                                            style="width: 70px;"
+                                        >
 
                                         <button
-                                            type="submit"
-                                            name="quantity"
-                                            value="{{ item.quantity|add:'1' }}"
-                                            class="btn btn-sm btn-outline-secondary rounded-circle"
-                                            aria-label="{% trans 'Adedi artır' %}"
-                                            {% if item.quantity >= item.product.stock %}disabled{% endif %}>
+                                            type="button"
+                                            class="btn btn-sm btn-outline-secondary rounded-circle cart-update-btn"
+                                            data-product-id="{{ item.product_id }}"
+                                            data-action="increase"
+                                            style="width: 36px; height: 36px;"
+                                        >
                                             <i class="bi bi-plus"></i>
                                         </button>
-                                    </form>
+                                    </div>
                                 </td>
-
-                                <td class="fw-bold text-custom">
-                                    {{ item.total }} TL
-                                </td>
-
                                 <td class="text-end">
-                                    <form action="{% url 'cart_remove' item.product.id %}" method="post">
-                                        {% csrf_token %}
-                                        <button
-                                            type="submit"
-                                            class="btn btn-sm btn-outline-danger rounded-pill"
-                                            title="{% trans 'Sepetten kaldır' %}">
-                                            <i class="bi bi-trash"></i>
-                                        </button>
-                                    </form>
+                                    <span class="fw-bold cart-item-total" id="item-total-{{ item.product_id }}">
+                                        {{ item.item_total }} TL
+                                    </span>
+                                </td>
+                                <td class="text-end">
+                                    <button
+                                        type="button"
+                                        class="btn btn-sm btn-outline-danger rounded-circle cart-remove-btn"
+                                        data-product-id="{{ item.product_id }}"
+                                        style="width: 36px; height: 36px;"
+                                    >
+                                        <i class="bi bi-trash"></i>
+                                    </button>
                                 </td>
                             </tr>
                             {% endfor %}
@@ -76,52 +98,231 @@
                     </table>
                 </div>
             </div>
-            <div class="mt-3">
-                <a href="{% url 'home' %}" class="btn btn-outline-dark rounded-pill px-4">
-                    <i class="bi bi-arrow-left me-1"></i> {% trans "Alışverişe Devam Et" %}
-                </a>
-            </div>
         </div>
 
-        <!-- SİPARİŞ ÖZETİ -->
         <div class="col-lg-4">
-            <div class="card border-0 shadow-sm rounded-4 p-4">
-                <h4 class="fw-bold mb-3 border-bottom pb-2">{% trans "Sipariş Özeti" %}</h4>
-                
+            <div class="card shadow-sm border-0 rounded-4 p-4">
+                <h5 class="fw-bold mb-3">{% trans "Sipariş Özeti" %}</h5>
+
                 <div class="d-flex justify-content-between mb-2">
                     <span class="text-muted">{% trans "Ara Toplam" %}</span>
-                    <span class="fw-semibold">{{ total_price }} TL</span>
-                </div>
-                <div class="d-flex justify-content-between mb-3">
-                    <span class="text-muted">{% trans "Kargo" %}</span>
-                    <span class="text-success fw-semibold">{% trans "Ücretsiz" %}</span>
-                </div>
-                
-                <hr>
-                
-                <div class="d-flex justify-content-between align-items-center mb-4">
-                    <span class="fs-5 fw-bold">{% trans "Genel Toplam" %}</span>
-                    <span class="fs-4 fw-bold text-custom">{{ total_price }} TL</span>
+                    <span class="fw-semibold" id="cart-subtotal">{{ total_price }} TL</span>
                 </div>
 
-                <button class="btn btn-custom btn-lg w-100 rounded-pill fw-semibold shadow-sm">
-                    {% trans "Alışverişi Tamamla" %} <i class="bi bi-arrow-right ms-1"></i>
-                </button>
+                <div class="d-flex justify-content-between mb-2">
+                    <span class="text-muted">{% trans "Kargo" %}</span>
+                    <span class="fw-semibold text-success">{% trans "Ücretsiz" %}</span>
+                </div>
+
+                <hr>
+
+                <div class="d-flex justify-content-between mb-4">
+                    <span class="fw-bold">{% trans "Genel Toplam" %}</span>
+                    <span class="fw-bold fs-5 text-custom" id="cart-grand-total">{{ total_price }} TL</span>
+                </div>
+
+                <a href="#" class="btn btn-custom rounded-pill w-100 fw-semibold">
+                    {% trans "Alışverişi Tamamla" %}
+                </a>
+
+                <a href="{% url 'home' %}" class="btn btn-outline-dark rounded-pill w-100 mt-2">
+                    {% trans "Alışverişe Devam Et" %}
+                </a>
             </div>
         </div>
     </div>
     {% else %}
-    <!-- SEPET BOŞ DURUMU -->
-    <div class="card border-0 shadow-sm rounded-4 p-5 text-center my-4">
-        <div class="py-4">
-            <i class="bi bi-cart-x text-muted" style="font-size: 4rem;"></i>
-            <h4 class="fw-bold mt-3">{% trans "Sepetiniz henüz boş" %}</h4>
-            <p class="text-muted">{% trans "İhtiyacınız olan parçaları hemen inceleyin ve sepetinize ekleyin." %}</p>
-            <a href="{% url 'home' %}" class="btn btn-custom rounded-pill px-4 py-2 mt-2">
-                {% trans "Alışverişe Başla" %}
-            </a>
-        </div>
+    <div class="text-center py-5">
+        <i class="bi bi-cart-x display-1 text-muted"></i>
+        <h4 class="mt-3 fw-bold">{% trans "Sepetiniz henüz boş" %}</h4>
+        <p class="text-muted">{% trans "İhtiyacınız olan parçaları hemen inceleyin ve sepetinize ekleyin." %}</p>
+        <a href="{% url 'home' %}" class="btn btn-custom rounded-pill px-4 fw-semibold">
+            {% trans "Alışverişe Başla" %}
+        </a>
     </div>
     {% endif %}
 </div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+function getCookie(name) {
+    let cookieValue = null;
+    if (document.cookie && document.cookie !== '') {
+        const cookies = document.cookie.split(';');
+        for (let i = 0; i < cookies.length; i++) {
+            const cookie = cookies[i].trim();
+            if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                break;
+            }
+        }
+    }
+    return cookieValue;
+}
+
+const csrfToken = getCookie('csrftoken');
+
+function updateCartUI(data) {
+    if (data.quantity === 0) {
+        const row = document.getElementById('cart-item-' + data.product_id);
+        if (row) {
+            row.remove();
+        }
+    } else {
+        const qtyInput = document.querySelector('.cart-qty-input[data-product-id="' + data.product_id + '"]');
+        if (qtyInput) {
+            qtyInput.value = data.quantity;
+        }
+
+        const itemTotal = document.getElementById('item-total-' + data.product_id);
+        if (itemTotal) {
+            itemTotal.textContent = data.item_total.toFixed(2) + ' TL';
+        }
+    }
+
+    const subtotal = document.getElementById('cart-subtotal');
+    const grandTotal = document.getElementById('cart-grand-total');
+
+    if (subtotal) {
+        subtotal.textContent = data.cart_total.toFixed(2) + ' TL';
+    }
+
+    if (grandTotal) {
+        grandTotal.textContent = data.cart_total.toFixed(2) + ' TL';
+    }
+
+    updateCartBadge(data.cart_count);
+}
+
+function updateCartBadge(count) {
+    const badge = document.querySelector('.cart-badge');
+    if (badge) {
+        badge.textContent = count;
+        badge.style.display = count > 0 ? 'inline' : 'none';
+    }
+}
+
+function sendCartUpdate(productId, quantity) {
+    const formData = new FormData();
+    formData.append('quantity', quantity);
+    formData.append('csrfmiddlewaretoken', csrfToken);
+
+    fetch("{% url 'cart_update' 0 %}".replace('0', productId), {
+        method: 'POST',
+        headers: {
+            'X-Requested-With': 'XMLHttpRequest',
+            'X-CSRFToken': csrfToken,
+        },
+        body: formData
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            updateCartUI(data);
+        } else {
+            alert(data.message || 'Bir hata oluştu.');
+        }
+    })
+    .catch(error => {
+        console.error('Sepet güncelleme hatası:', error);
+    });
+}
+
+function sendCartRemove(productId) {
+    const formData = new FormData();
+    formData.append('csrfmiddlewaretoken', csrfToken);
+
+    fetch("{% url 'cart_remove' 0 %}".replace('0', productId), {
+        method: 'POST',
+        headers: {
+            'X-Requested-With': 'XMLHttpRequest',
+            'X-CSRFToken': csrfToken,
+        },
+        body: formData
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            updateCartUI(data);
+
+            if (data.cart_count === 0) {
+                location.reload();
+            }
+        } else {
+            alert(data.message || 'Bir hata oluştu.');
+        }
+    })
+    .catch(error => {
+        console.error('Sepet silme hatası:', error);
+    });
+}
+
+document.addEventListener('DOMContentLoaded', function () {
+    document.querySelectorAll('.cart-update-btn').forEach(button => {
+        button.addEventListener('click', function () {
+            const productId = this.dataset.productId;
+            const action = this.dataset.action;
+            const input = document.querySelector('.cart-qty-input[data-product-id="' + productId + '"]');
+            let currentQty = parseInt(input.value) || 1;
+            let newQty = currentQty;
+
+            if (action === 'increase') {
+                newQty = currentQty + 1;
+            } else if (action === 'decrease') {
+                newQty = currentQty - 1;
+            }
+
+            if (newQty < 1) {
+                if (confirm('Bu ürünü sepetten kaldırmak istiyor musunuz?')) {
+                    sendCartRemove(productId);
+                }
+                return;
+            }
+
+            sendCartUpdate(productId, newQty);
+        });
+    });
+
+    document.querySelectorAll('.cart-qty-input').forEach(input => {
+        let previousValue = input.value;
+
+        input.addEventListener('focus', function () {
+            previousValue = this.value;
+        });
+
+        input.addEventListener('change', function () {
+            const productId = this.dataset.productId;
+            let newQty = parseInt(this.value) || 1;
+
+            if (newQty < 1) {
+                if (confirm('Bu ürünü sepetten kaldırmak istiyor musunuz?')) {
+                    sendCartRemove(productId);
+                } else {
+                    this.value = previousValue;
+                }
+                return;
+            }
+
+            sendCartUpdate(productId, newQty);
+        });
+
+        input.addEventListener('keypress', function (e) {
+            if (e.key === 'Enter') {
+                this.blur();
+            }
+        });
+    });
+
+    document.querySelectorAll('.cart-remove-btn').forEach(button => {
+        button.addEventListener('click', function () {
+            const productId = this.dataset.productId;
+
+            if (confirm('Bu ürünü sepetten kaldırmak istiyor musunuz?')) {
+                sendCartRemove(productId);
+            }
+        });
+    });
+});
+</script>
 {% endblock %}
